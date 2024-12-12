@@ -1,0 +1,4 @@
+**/__pycache__/**
+cached_models/**
+cuda/**
+cuda.sh

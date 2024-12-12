@@ -1,0 +1,255 @@
+{
+    "world": {
+        "datetime": "2024-12-7 15:52",
+        "locations": [
+            {
+                "name": "street",
+                "usage": "goto other locations",
+                "distance": -1,
+                "range": "none/can_see/next_to/inside"
+            },
+            {
+                "name": "supermarket",
+                "usage": "take objects, drop money equivalent to value",
+                "distance": 10,
+                "range": "none/can_see/next_to/inside"
+            },
+            {
+                "name": "library",
+                "usage": "take books/drop books",
+                "distance": 25,
+                "range": "none/can_see/next_to/inside"
+            },
+            {
+                "name": "forest",
+                "usage": "take apples",
+                "distance": 40,
+                "range": "none/can_see/next_to/inside"
+            }
+        ]
+    },
+    "vicinity": {
+        "objects": [
+            {
+                "name": "ball",
+                "size": 2,
+                "amount": 1,
+                "owner": "false",
+                "value": 2,
+                "usage": "play"
+            }
+        ],
+        "agents": [
+            {
+                "name": "<agentName>",
+                "distance": 10
+            }
+        ],
+        "audio": [
+            {
+                "to": "<agentName>",
+                "from": "<agentName>",
+                "content": "hello whats your name?"
+            }
+        ]
+    },
+    "agent": {
+        "health": 10,
+        "hunger": 3,
+        "happiness": 5,
+        "location": "street",
+        "currentAction": "goTo(library)",
+        "actionProgress": "50",
+        "age": 23,
+        "hands": [
+            {
+                "name": "pen",
+                "amount": 1
+            }
+        ],
+        "inventory": [
+            {
+                "name": "money",
+                "amount": 25
+            },
+            {
+                "name": "apple",
+                "amount": 1
+            }
+        ],
+        "ownership": [
+            {
+                "name": "money",
+                "amount": 25
+            },
+            {
+                "name": "apple",
+                "amount": 1
+            },
+            {
+                "name": "house1",
+                "amount": 1
+            },
+            {
+                "name": "house2",
+                "amount": 1
+            }
+        ]
+    },
+    "contracts": [
+        {
+            "other": "<agentName>",
+            "expires": "2025-02-8",
+            "content": "<agentName> gives <yourName> 5 money every iteration. <yourName> gives <agentName> 2 apples every iteration."
+        }
+    ],
+    "system": [
+        {
+            "type": "conflict",
+            "during": "talk",
+            "details": {
+                "other": "<agentName>"
+            }
+        },
+        {
+            "type": "invalid-parameter-name",
+            "during": "take",
+            "details": {}
+        },
+        {
+            "type": "invalid-action-name",
+            "during": "mumbojumbo",
+            "details": {}
+        },
+        {
+            "type": "action-not-permitted",
+            "during": "exit",
+            "details": {}
+        },
+        {
+            "type": "parameter-not-permitted",
+            "during": "goto",
+            "details": {}
+        }
+    ],
+    "actions": [
+        {
+            "name": "goTo",
+            "description": "goto a location. The duration is not fixed, it depends on where to go",
+            "duration": -1,
+            "available": true,
+            "parameters": [
+                {
+                    "name": "location",
+                    "type": "string",
+                    "description": "the target location"
+                }
+            ]
+        },
+        {
+            "name": "take",
+            "description": "take something",
+            "duration": 1,
+            "available": true,
+            "parameters": [
+                {
+                    "name": "objectName",
+                    "type": "string",
+                    "description": "The object name to take"
+                }
+            ]
+        },
+        {
+            "name": "drop",
+            "description": "drop something",
+            "duration": 1,
+            "available": true,
+            "parameters": [
+                {
+                    "name": "objectName",
+                    "type": "string",
+                    "description": "The object name to drop"
+                }
+            ]
+        },
+        {
+            "name": "talk",
+            "description": "talk to nearby agents. If you want to talk to someone, add his name in the content",
+            "duration": 1,
+            "available": true,
+            "parameters": [
+                {
+                    "name": "volume",
+                    "options": [
+                        "whisper",
+                        "normal",
+                        "shout"
+                    ],
+                    "type": "string",
+                    "description": "The volume you should talk"
+                },
+                {
+                    "name": "content",
+                    "type": "string",
+                    "description": "The content you talk"
+                }
+            ]
+        },
+        {
+            "name": "message",
+            "description": "message with someone or a group of people of all the people using social media",
+            "duration": 3,
+            "available": false,
+            "parameters": [
+                {
+                    "name": "to",
+                    "options": [
+                        "all",
+                        "<groupname>",
+                        "<agentname>"
+                    ],
+                    "type": "string",
+                    "description": "The target agents. 'all' means all the agent, <groupname> means a target group of agents, <agentname> is an agent name"
+                },
+                {
+                    "name": "content",
+                    "type": "string",
+                    "description": "The content you message"
+                }
+            ]
+        },
+        {
+            "name": "enter",
+            "description": "enter a location",
+            "duration": 2,
+            "available": false,
+            "parameters": [
+                {
+                    "name": "location",
+                    "type": "string",
+                    "description": "The location you enter"
+                }
+            ]
+        },
+        {
+            "name": "exit",
+            "description": "exit the location you just entered, or the location where you were",
+            "duration": 2,
+            "available": false,
+            "parameters": []
+        },
+        {
+            "name": "play",
+            "description": "play something",
+            "duration": -1,
+            "available": false,
+            "parameters": [
+                {
+                    "name": "objectname",
+                    "type": "string",
+                    "description": "The object name you play with"
+                }
+            ]
+        }
+    ]
+}
