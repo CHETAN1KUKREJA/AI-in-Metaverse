@@ -15,6 +15,10 @@ pip install sentencepiece==0.1.99
 pip install accelerate==0.29.3
 pip install datasets==2.19.0
 pip install peft==0.10.0
+pip install huggingface_hub==0.26.3
+pip install langchain==0.3.11
+pip install langchain_experimental==0.3.3
+pip install langchain_huggingface==0.1.2
 ```
 
 For a faster attention calculation, FlashAttention is used, but it needs to use the cuda compiler to build:
