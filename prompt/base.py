@@ -15,9 +15,10 @@ def get_prompt(input_json, chain_mode="guided_chain"):
     actions_list = input_json["actions"]
 
     description_prompt = f"""
-you are an LLM agent that is supposed to act like a human character in a virtual environment. you are given some set of actions and your job is to choose the most relevant sequence of actions in order to carry out a task in the environment. In this environment there is a forest to collect to apples with a limited supply per day and you use money to trade apples. There is a trade centre where trades can occur with other agents, and there is a house where agents can sleep.
+you are an LLM agent that is supposed to act like a human character in a virtual environment. you are given some set of actions and your job is to choose the most relevant sequence of actions in order to carry out a task in the environment.
 
 ### world description
+The current time in your world is {world_dict['datetime']}, There are a number of locations in your world and their descriptions are as follows:
 {get_world_prompt(world_dict)}
 
 ### vicinity description
