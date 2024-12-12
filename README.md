@@ -1,93 +1,205 @@
 # LLM-Backend
 
+## Prompt Engineering
 
+TODO: merge progress
 
-## Getting started
+We provide 3 modes: simple_chain, guided_chain and deep_guided_chain. The latter two modes are implemented to guide the LLM to extract information using manually designed steps to suppress hallucination. Thus, they are more explainable and controllable. But the deep_guided_chain outputs more intermediate steps and therefore can be slower and memory consuming. The default mode is set to guided_chain.
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+### Testing
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+We provide the `prompt_engineering.py` to test the prompt. You can either simply output the prompt or test it on a local LLM. Currently tested models are:
 
-## Add your files
+* unsloth/Llama-3.3-70B-Instruct-bnb-4bit
+* meta-llama/Meta-Llama-3.1-8B-Instruct
+* katanemo/Arch-Function-3B
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+### Sample Result
 
+Using the `test_json.json`, here are the some outputs:
+
+#### Llama-3.3-70B-Instruct-bnb-4bit with simple_chain mode:
+
+```md
+To maximize the amount of money I have, I need to consider the available actions and the current state of the environment. Here's my chain of thoughts:
+
+1. **Assess Current State**: I am at the trade centre with 50 euros and 20 apples. There's another agent, Maria, also at the trade centre. This information is crucial because it suggests potential trade opportunities.
+
+2. **Consider Trading**: Since I have apples and euros, and there's another agent nearby, trading could be beneficial. However, to initiate a trade, I might need to communicate with Maria.
+
+3. **Choose Action - Talk**: To communicate with Maria about a potential trade, I should use the "talk" action. This action allows me to convey my interest in trading and negotiate terms.
+
+4. **Determine Trade Details**: Before talking, I should decide what I'm willing to trade (apples for euros or vice versa) and what ratio seems fair. Given that I have 20 apples and 50 euros, and without knowing the market demand or supply, a straightforward approach could be to offer a direct trade based on equal value, if possible.
+
+5. **Execute Talk Action**: With the "talk" action, I'll approach Maria and propose a trade. The volume can be "normal" since we are in the same location, and the content will include my proposal, such as "Hello Maria, I have 20 apples and 50 euros. Would you like to trade?"
+
+6. **Potential Next Steps**: Depending on Maria's response, the next actions could involve agreeing on a trade, which might require using the "take" and "drop" actions to exchange goods, or renegotiating terms if the initial proposal isn't acceptable.
+
+Given these considerations, my initial action will be to talk to Maria to propose a trade. Here is the sequence of actions I've decided on so far, formatted as requested:
+
+<tool_call>
+{"name": "talk", "arguments": {"volume": "normal", "content": "Hello Maria, I have 20 apples and 50 euros. Would you like to trade?"}}
+</tool_call>
+Finished in 147.8059s
 ```
-cd existing_repo
-git remote add origin https://gitlab.lrz.de/AImetaverse/llm-backend.git
-git branch -M main
-git push -uf origin main
+
+#### Llama-3.3-70B-Instruct-bnb-4bit with guided_chain mode:
+
+```md
+### Step 0: Analysis and Planning                                                                                                                                                                                                                                                  
+                                                                                                                                                                                                                                                                                   
+Given the current situation, my goal is to maximize the amount of money I have. I am currently at the trade centre with 50 euros and 20 apples. There is another agent, Maria, also at the trade centre. To achieve my goal, I need to gather more information about the current ma
+rket conditions and potential trades. Since I don't have enough information about what Maria has or what she is willing to trade, my first step should be to communicate with her. The action "talk" seems most appropriate for this purpose. I will ask Maria about her current in
+ventory and what she is willing to trade.                                                                                                                                                                                                                                          
+                                                                                                                                                                                                                                                                                   
+### Step 1: Identify Sequential Key Actions                                                                                                                                                                                                                                        
+                                                                                                                                                                                                                                                                                   
+1. **Talk to Maria**: To gather information about her inventory and potential trades.                                                                                                                                                                                              
+2. **Assess Trade Opportunities**: Based on Maria's response, decide if there's a beneficial trade to be made.                                                                                                                                                                     
+3. **Execute Trade (if beneficial)**: Use the "take" and "drop" actions to exchange goods if a beneficial trade is found.                                                                                                                                                          
+
+I chose these actions because they directly contribute to my goal of maximizing my money by potentially allowing me to make profitable trades. The "talk" action is essential for gathering necessary information, and "take" and "drop" are crucial for executing any trade that m
+ight be agreed upon.                                                
+
+### Step 2: Extract/Generate Parameters and Contents                
+
+For the "talk" action:                                              
+- **Volume**: "normal" seems appropriate for a trade negotiation.                                                                        
+- **Content**: "Hello Maria, what are you willing to trade?"                                                                             
+
+For potential "take" and "drop" actions, the parameters will depend on the outcome of the negotiation with Maria. For example:                                                                                                                                                     
+- If Maria agrees to trade 5 of her apples for 10 euros, the actions would be:                                                           
+  - **Take**: "10 euros"                                            
+  - **Drop**: "5 apples"                                            
+
+However, these are speculative and depend on the negotiation outcome.                                                                    
+
+### Step 3: Format Function Calls as JSON Objects within XML Tags                                                                        
+
+Given the initial step of talking to Maria, the function call would be:                                                                  
+
+<tool_call>                                                         
+{"name": "talk", "arguments": {"volume": "normal", "content": "Hello Maria, what are you willing to trade?"}}                            
+</tool_call>                                                        
+
+Subsequent actions will be determined based on Maria's response and will follow a similar format for "take" and "drop" actions if a trade is agreed upon.                                                                                                                          
+Finished in 156.1652s
 ```
 
-## Integrate with your tools
+#### Llama-3.3-70B-Instruct-bnb-4bit with deep_guided_chain mode:
 
-- [ ] [Set up project integrations](https://gitlab.lrz.de/AImetaverse/llm-backend/-/settings/integrations)
+```md
+## Step 0: Plan what to do for a short period                       
+To maximize the amount of money, the first step is to gather information about the current state of the trade centre and the forest. Since there is another agent, Maria, at the trade centre, it might be beneficial to interact with her to see if there are any trade opportunit
+ies. The plan is to:                                                
+1. Talk to Maria to gather information about her current stock of apples and money.                                                      
+2. Ask Maria if she is willing to trade apples for money.           
+3. If a trade is possible, negotiate the terms of the trade.                                                                             
+4. If no trade is possible with Maria, consider going to the forest to collect apples.                                                   
 
-## Collaborate with your team
+## Step 1: Extract a sequence of actions and parameters pairs from the plan                                                              
+### Substep 1.1.1: Output description of the action                 
+1. Action: talk                                                     
+2. Parameters: volume, content                                      
+3. list:                                                            
+- Talk to Maria to gather information about her current stock of apples and money.                                                       
+- Ask Maria if she is willing to trade apples for money.            
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+### Substep 1.1.2: Verify the action and parameters                 
+1. The action "talk" appears in the plan.                           
+2. The sentences covering the action and parameters appear in the plan.                                                                  
+3. The parameter "content" might need to be specified based on Maria's response, which will be answered by her.                          
+Considering the need to interact with Maria first, the sequence of actions starts with talking to her.                                   
 
-## Test and Deploy
+## Step 2: Format the plan as function calls in JSON objects within single XML tags                                                      
+Given the plan and the actions available, the first step is to talk to Maria. The function call for this action is:                      
 
-Use the built-in continuous integration in GitLab.
+<tool_call>                                                         
+{"name": "talk", "arguments": {"volume": "normal", "content": "Hello Maria, what are you trading today?"}}                               
+</tool_call>                                                        
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+This initial interaction is aimed at gathering information and setting the stage for potential trades or other actions based on Maria's response. Further actions will depend on her answer, which could involve negotiating a trade, deciding to go to the forest, or other option
+s based on the information exchanged.                               
+Finished in 162.5875s
+```
 
-***
+#### Meta-Llama-3.1-8B-Instruct with simple_chain mode
 
-# Editing this README
+We can observe a huge hallucination here.
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
+```md
+Chain-of-thoughts:                                                                                                                                                                                                                                                                 
+                                                                                                                                                                                                                                                                                   
+I need to maximize my money, and I currently have 50 euros and 20 apples. I'm at the trade centre, which means I have a chance to trade with other agents. I see Maria at the trade centre, so I should try to talk to her and see if we can make a trade.                         
+                                                                                                                                                                                                                                                                                   
+First, I need to talk to Maria to initiate a trade. I'll use the "talk" action to do this. I'll choose the "normal" volume and a content that invites her to trade.                                                                                                                
+                                                                                                                                                                                                                                                                                   
+<tool_call>                                                                                                                                                                                                                                                                        
+{"name": "talk", "arguments": {"volume": "normal", "content": "Hey Maria, want to trade apples for euros?"}}                                                                                                                                                                       
+</tool_call>                                                                                                                                                                                                                                                                       
+                                                                                                                                                                                                                                                                                   
+Now, I need to wait for Maria's response. Once she responds, I'll proceed accordingly.                                                                                                                                                                                             
+                                                                                                                                                                                                                                                                                   
+Assuming Maria agrees to trade, I'll need to determine the terms of the trade. If she has apples and I have euros, I should offer to trade my apples for her euros.                                                                                                                
+                                                                                                                                                                                                                                                                                   
+After the trade, I'll have a new amount of money and apples. If I have more apples than I can carry, I should consider going to the forest to collect more apples.                                                                                                                 
+                                                                                                                                                                                                                                                                                   
+However, since I'm at the trade centre, I should check if there are any other agents nearby who might be willing to trade. If not, I can consider going to the forest.
 
-## Suggestions for a good README
+For now, let's assume Maria agrees to trade.
 
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+Next, I need to determine the number of apples I want to trade. I have 20 apples, and I want to maximize my money. I'll offer to trade 10 apples for her euros.
 
-## Name
-Choose a self-explaining name for your project.
+<tool_call>
+{"name": "talk", "arguments": {"volume": "normal", "content": "I'll give you 10 apples for 10 euros."}}
+</tool_call>
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+Now, I'll wait for Maria's response.
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+Assuming she agrees to the trade, I'll proceed with the trade.
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+<tool_call>
+{"name": "take", "arguments": {"objectName": "10 apples"}}
+</tool_call>
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+<tool_call>
+{"name": "drop", "arguments": {"objectName": "10 apples"}}
+</tool_call>
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+<tool_call>
+{"name": "take", "arguments": {"objectName": "10 euros"}}
+</tool_call>
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+Now, I have 10 euros and 10 apples. I should go to the forest to collect more apples.
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+<tool_call>
+{"name": "goTo", "arguments": {"location": "forest"}}
+</tool_call>
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+Final sequence of actions:
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+<tool_call>
+{"name": "talk", "arguments": {"volume": "normal", "content": "Hey Maria, want to trade apples for euros?"}}
+</tool_call>
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+<tool_call>
+{"name": "talk", "arguments": {"volume": "normal", "content": "I'll give you 10 apples for 10 euros."}}
+</tool_call>
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+<tool_call>
+{"name": "take", "arguments": {"objectName": "10 apples"}}
+</tool_call>
 
-## License
-For open source projects, say how it is licensed.
+<tool_call>
+{"name": "drop", "arguments": {"objectName": "10 apples"}}
+</tool_call>
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+<tool_call>
+{"name": "take", "arguments": {"objectName": "10 euros"}}
+</tool_call>
+
+<tool_call>
+{"name": "goTo", "arguments": {"location": "forest"}}
+</tool_call>
+Finished in 37.9471s
+```
