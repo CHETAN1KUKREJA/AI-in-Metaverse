@@ -3,3 +3,9 @@ cached_models/**
 cuda/**
 cuda.sh
 **/*.temp
+
+LLaMA-Factory/**
+!LLaMA-Factory/configs
+!LLaMA-Factory/configs/*
+!LLaMA-Factory/data
+!LLaMA-Factory/data/dataset_info.json
