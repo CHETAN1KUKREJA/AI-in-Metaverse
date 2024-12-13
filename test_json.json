@@ -58,8 +58,8 @@
         "hunger": 3,
         "happiness": 5,
         "location": "street",
-        "currentAction": "goTo(library)",
-        "actionProgress": "50",
+        "currentAction": "None",
+        "actionProgress": "-1",
         "age": 23,
         "hands": [
             {
@@ -135,7 +135,7 @@
     ],
     "actions": [
         {
-            "name": "goTo",
+            "name": "go_to",
             "description": "goto a location. The duration is not fixed, it depends on where to go",
             "duration": -1,
             "available": true,
