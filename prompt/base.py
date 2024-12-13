@@ -51,6 +51,8 @@ The output you must generate must be a Chain-of-thoughts which consist of valid 
 
 <tool_call>
 {{"name": <function-name>(, "arguments": <args-json-object>)}}
+{{"name": <function-name>(, "arguments": <args-json-object>)}}
+...
 </tool_call>
 """.strip()
 
@@ -58,31 +60,26 @@ The output you must generate must be a Chain-of-thoughts which consist of valid 
     task_prompt_guided_chain = f"""
 Think step by step. Output what you get and think for each step.
 
-Step 0: Analysis with the given information and plan what you should do for a short period in nature language regarding your goal. Always ask yourself if the plan can be executed using the actions provided. If you don't have information, you have to ask the other agents. You must give an explanation as for the plan.
+Step 0: Analysis with the given information: world, vicinity, agent, contracts, system and actions. Then, plan what you should do for a short period in nature language regarding your goal. If you don't have information, you have to ask the other agents. You must give an explanation as for the plan.
 
-Step 1: Identify the sequential key actions that are relevant to tool functions and the goal as a list. You must give an explanation as to why you chose the actions.
+Step 1: Identify the sequential key actions that are relevant to tool functions and the goal as a list. You must give an explanation as to why you chose the actions. Everytime you identify a key action, extract the required parameters or genreate contents for parameters that matches the context. You must also explain why you select those parameters
 
-Step 2: Extract / Genreate the required parameters and contents for parameters that matches the context for each key actions you identified in step 1.
-
-Step 3: Using the result from step 1 and 2, format ALL the function calls as JSON objects within XML tags <tool_call></tool_call> with function name and arguments:
+Step 2: Using the result from step 1 and 2, format ALL the function calls as JSON objects within XML tags <tool_call></tool_call> with function name and arguments:
 
 <tool_call>
 {{"name": <function-name>(, "arguments": <args-json-object>)}}
+{{"name": <function-name>(, "arguments": <args-json-object>)}}
+...
 </tool_call>
 """.strip()
 
     # Jiong's revision
     task_prompt_deep_guided_chain = f"""
-Think step by step. Output what you get and think for each step. Do not repeatly output the concret instructions for saving output tokens, but you have to output the Step and SubStep label.
+Think step by step. Output what you get and think for each step. 
 
-Step 0: Analysis with the given information and plan what you should do for a short period in nature language regarding your goal. Always ask yourself if the plan can be executed using the actions provided. If you don't have information, you have to ask the other agents. You have to explain it and output the plan in the format:
+Step 0: Output your analysis with the given information: world, vicinity, agent, contracts, system and actions. Then, plan what you should do for a short period with sequential actions in nature language regarding your goal. You must explain your plan. The verbs you used for plan must come from available actions, but you can split other verbs into available ones. If you don't have information, you have to ask the other agents.
 
-Plan:
-    1. <action in nature language>
-    2. <action in nature language>
-    ...
-
-Step 1: From step 0 and the given information, extract a sequence of actions and parameters pairs from the plan:
+Step 1: From step 0 and the given information, extract sequential actions and parameters pairs from the plan:
 
 Substep 1.1.1: output description of the action
     1. Action: <actual-action>
@@ -94,7 +91,9 @@ Substep 1.1.2: answer each of these
     2. Verify if the sentences covering the action and parameters really appears in Step 0. If not, you are hallucinating and stop.
     3. Verify if the parameter is missing or waiting to be answered by another agent. If true, stop and wait.
     4. Consider if you should stop because you ask a question in previous substeps and wait another agent to answer or other reasons.
-    Else repeat to Substep 1.2.1, 1.2.2 and so on until stop or finish extracting.
+    5. Report if you should stop if any 4 points of above need to stop. If so, you MUST jump to Step 2.
+
+Repeat to Substep 1.1.1, 1.1.2 and so on until stop or finish extracting.
 
 Make sure the sequence of actions and parameter is reasonable in the reality.
 
@@ -103,6 +102,8 @@ Step 2: Using the result from step 0 and 1, format the plan as the function call
 <tool_call>
 {{"name": <function-name>(, "arguments": <args-json-object>)}}
 {{"name": <function-name>(, "arguments": <args-json-object>)}}
+...
+</tool_call>
 """.strip()
 
     prompt = description_prompt + "\n\n" + goal_prompt + "\n\n" + eval(f"task_prompt_{chain_mode}")

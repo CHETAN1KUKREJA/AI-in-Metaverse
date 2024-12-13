@@ -4,6 +4,10 @@ def get_agent_prompt(agent):
     if not agent:
         return "No agent data available."
 
+    items_in_hand = ', '.join([f"{item['name']} ({item['amount']})" for item in agent['hands']])
+    inventory = ', '.join([f"{item['name']} ({item['amount']})" for item in agent['inventory']])
+    ownership = ', '.join([f"{item['name']} ({item['amount']})" for item in agent['ownership']])
+
     agent_description = (
         f"\nYour current status:\n"
         f"- Health: {agent['health']}\n"
@@ -13,8 +17,8 @@ def get_agent_prompt(agent):
         f"- Current Location: {agent['location']}\n"
         f"- Current Action: {agent['currentAction']} "
         f"({agent['actionProgress']}% completed)\n"
-        f"- Items in Hand: {', '.join([f'{item['name']} ({item['amount']})' for item in agent['hands']])}\n"
-        f"- Inventory: {', '.join([f'{item['name']} ({item['amount']})' for item in agent['inventory']])}\n"
-        f"- Ownership: {', '.join([f'{item['name']} ({item['amount']})' for item in agent['ownership']])}"
+        f"- Items in Hand: {items_in_hand}\n"
+        f"- Inventory: {inventory}\n"
+        f"- Ownership: {ownership}"
     )
     return agent_description

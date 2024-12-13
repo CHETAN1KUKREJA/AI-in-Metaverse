@@ -1,0 +1,123 @@
+you are an LLM agent that is supposed to act like a human character in a virtual environment. you are given some set of actions and your job is to choose the most relevant sequence of actions in order to carry out a task in the environment.
+
+### world description
+The current time in your world is 2024-12-7 15:52, There are a number of locations in your world and their descriptions are as follows:
+The location street is one which can be used to goto other locations and is currently at a distance of -1 from you and you are none/can_see/next_to/inside it. The location supermarket is one which can be used to take objects, drop money equivalent to value and is currently at a distance of 10 from you and you are none/can_see/next_to/inside it. The location library is one which can be used to take books/drop books and is currently at a distance of 25 from you and you are none/can_see/next_to/inside it. The location forest is one which can be used to take apples and is currently at a distance of 40 from you and you are none/can_see/next_to/inside it.
+
+### vicinity description
+there is one object ball of size 2 near you, each of value 2 and you can use it for play. you are not the owner. there is an agent <agentName> at a distance 10 to you. 
+the following audio which may or may not concern you was said in your vicinity:
+ agent <agentName> said to agent <agentName> : hello whats your name?.
+
+### agent description
+
+Your current status:
+- Health: 10
+- Hunger: 3
+- Happiness: 5
+- Age: 23
+- Current Location: street
+- Current Action: goTo(library) (50% completed)
+- Items in Hand: pen (1)
+- Inventory: money (25), apple (1)
+- Ownership: money (25), apple (1), house1 (1), house2 (1)
+
+### contracts description
+
+You are engaged in the following contracts:
+With agent <agentName>, valid until 2025-02-8, you have agreed that:
+<agentName> gives <yourName> 5 money every iteration. <yourName> gives <agentName> 2 apples every iteration.
+
+### system description
+0. Another agent "Marie" was talking, and what you just said "Hello!" is covered. You may need to repeat it.
+1. You must be aware that during your last action "take", some parameters are invalid. Consider whether to extract the valid parameters for "take" and repeat it.
+2. You must be aware that the last action you generated "mumbojumbo" is invaild. You are not allowed to perform it.
+3. You must be aware that the last action you generated "exit" is invaild. You are not allowed to perform it.
+4. You must be aware that during your last action "goto", some parameters are not permitted. Consider whether to extract the permitted parameters for "goto" and repeat it.
+
+### actions description
+Duration descriptor is -1 means that the
+The set of actions available to you are: 
+{"name": "goTo", "description": "goto a location. The duration is not fixed, it depends on where to go", "duration": -1, "parameters": [{"name": "location", "type": "string", "description": "the target location"}]}
+{"name": "take", "description": "take something", "duration": 1, "parameters": [{"name": "objectName", "type": "string", "description": "The object name to take"}]}
+{"name": "drop", "description": "drop something", "duration": 1, "parameters": [{"name": "objectName", "type": "string", "description": "The object name to drop"}]}
+{"name": "talk", "description": "talk to nearby agents. If you want to talk to someone, add his name in the content", "duration": 1, "parameters": [{"name": "volume", "options": ["whisper", "normal", "shout"], "type": "string", "description": "The volume you should talk"}, {"name": "content", "type": "string", "description": "The content you talk"}]}
+
+### end of description
+That's all the information you know for now. If you need information from other agents, you should ask them and wait them to reply. You are not allowed to assume anything yourself.
+
+### goal
+Your goal is always to maximise the amount of money that you have and generate a valid sequence of actions you choose to do at that particular instant of time.
+
+Think step by step. Output what you get and think for each step. Do not repeatly output the concret instructions for saving output tokens, but you have to output the Step and SubStep label.
+
+Step 0: Analysis with the given information: world, vicinity, agent, contracts, system and actions. Then, plan what you should do for a short period in nature language regarding your goal. If you don't have information, you have to ask the other agents. You have to explain it and output the plan in the format:
+
+Plan:
+    1. <action in nature language>
+    2. <action in nature language>
+    ...
+
+Step 1: From step 0 and the given information, extract a sequence of actions and parameters pairs from the plan:
+
+Substep 1.1.1: output description of the action
+    1. Action: <actual-action>
+    2. Parameters: <acutal-parameters>
+    3. list: [sentences covering the action and parameters]
+    
+Substep 1.1.2: answer each of these
+    1. Verify if the action really appears in Step 0. If not, you are hallucinating and stop.
+    2. Verify if the sentences covering the action and parameters really appears in Step 0. If not, you are hallucinating and stop.
+    3. Verify if the parameter is missing or waiting to be answered by another agent. If true, stop and wait.
+    4. Consider if you should stop because you ask a question in previous substeps and wait another agent to answer or other reasons.
+
+Repeat to Substep 1.1.1, 1.1.2 and so on until stop or finish extracting.
+
+Make sure the sequence of actions and parameter is reasonable in the reality.
+
+Step 2: Using the result from step 0 and 1, format the plan as the function calls in JSON objects within single XML tags <tool_call></tool_call> with function names and arguments:
+
+<tool_call>
+{"name": <function-name>(, "arguments": <args-json-object>)}
+{"name": <function-name>(, "arguments": <args-json-object>)}
+</tool_call>
+## Step 0: Analysis with the given information
+The goal is to maximize the amount of money. Currently, I have 25 money units and an apple. There's a contract with another agent to exchange 5 money units for 2 apples every iteration. I am currently on the street, heading to the library (50% completed), and there's a ball near me that I can use for play but don't own.
+
+Given the vicinity description, there's another agent 10 units away from me, and they've initiated a conversation. The world description indicates various locations with different uses, such as the supermarket for taking objects or dropping money and the forest for taking apples.
+
+Plan:
+1. Complete the journey to the library to explore potential resources or information.
+2. Respond to the other agent's greeting to establish communication and potentially negotiate trades or gather information.
+3. Consider visiting the supermarket to acquire more objects or money.
+4. Evaluate the contract and decide whether to fulfill it or attempt to renegotiate based on current resources and needs.
+
+## Step 1: Extract a sequence of actions and parameters pairs from the plan
+Substep 1.1.1:
+1. Action: goTo
+2. Parameters: location="library"
+3. list: ["Complete the journey to the library", "explore potential resources or information"]
+
+Substep 1.1.2:
+1. Verify if the action really appears in Step 0: Yes, it's part of the plan to maximize money and utilize locations.
+2. Verify if the sentences covering the action and parameters really appear in Step 0: Yes, they align with the plan to visit the library.
+3. Verify if the parameter is missing or waiting to be answered by another agent: No, the location is specified as the library.
+4. Consider if you should stop because you ask a question in previous substeps and wait for another agent to answer or other reasons: No, this action is independent of other agents' responses.
+
+Substep 1.1.1 for the next action:
+1. Action: talk
+2. Parameters: volume="normal", content="Hello, what's your name?"
+3. list: ["Respond to the other agent's greeting", "establish communication"]
+
+Substep 1.1.2 for the talk action:
+1. Verify if the action really appears in Step 0: Yes, responding to the agent is part of the plan.
+2. Verify if the sentences covering the action and parameters really appear in Step 0: Yes, they align with the plan to communicate.
+3. Verify if the parameter is missing or waiting to be answered by another agent: No, the volume and content are specified.
+4. Consider if you should stop because you ask a question in previous substeps and wait for another agent to answer or other reasons: No, this action is a response and doesn't require waiting.
+
+## Step 2: Format the plan as function calls in JSON objects within single XML tags
+<tool_call>
+{"name": "goTo", "arguments": {"location": "library"}}
+{"name": "talk", "arguments": {"volume": "normal", "content": "Hello, what\'s your name?"}}
+</tool_call>
+Finished in 221.7917s

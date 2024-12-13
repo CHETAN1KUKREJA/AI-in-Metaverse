@@ -1,14 +1,3 @@
-# LLM-Backend
-
-## Prompt Engineering
-
-We provide 3 modes: simple_chain, guided_chain and deep_guided_chain. The latter two modes are implemented to guide the LLM to extract information using manually designed steps to suppress hallucination. Thus, they are more explainable and controllable. But the deep_guided_chain outputs more intermediate steps and therefore can be slower and memory consuming. The default mode is set to guided_chain.
-
-### Example Prompt
-
-Here is an example prompt from the `test_json.json`.
-
-```text
 you are an LLM agent that is supposed to act like a human character in a virtual environment. you are given some set of actions and your job is to choose the most relevant sequence of actions in order to carry out a task in the environment.
 
 ### world description
@@ -60,52 +49,18 @@ That's all the information you know for now. If you need information from other 
 ### goal
 Your goal is always to maximise the amount of money that you have and generate a valid sequence of actions you choose to do at that particular instant of time.
 
-The output you must generate must be a Chain-of-thoughts which consist of valid thought action pairs in a specific sequence. For each action you pick you must give an explanation as to why you chose it and finally combine all the actions to form a list/sequence and output it after the Chain-of-thoughts. The final sequence must be a valid JSON response within XML tags <tool_call></tool_call> with function name and arguments:
+Think step by step. Output what you get and think for each step.
+
+Step 0: Analysis with the given information: world, vicinity, agent, contracts, system and actions. Then, plan what you should do for a short period in nature language regarding your goal. Always ask yourself if the plan can be executed using the actions provided. If you don't have information, you have to ask the other agents. You must give an explanation as for the plan.
+
+Step 1: Identify the sequential key actions that are relevant to tool functions and the goal as a list. You must give an explanation as to why you chose the actions. Everytime you identify a key action, extract the required parameters or genreate contents for parameters that matches the context. You must also explain why you select those parameters
+
+Step 2: Using the result from step 1 and 2, format ALL the function calls as JSON objects within XML tags <tool_call></tool_call> with function name and arguments:
 
 <tool_call>
 {"name": <function-name>(, "arguments": <args-json-object>)}
 {"name": <function-name>(, "arguments": <args-json-object>)}
 </tool_call>
-```
-
-### Testing
-
-We provide the `prompt_engineering.py` to test the prompt. You can either simply output the prompt or test it on a local LLM. Currently tested models are:
-
-* unsloth/Llama-3.3-70B-Instruct-bnb-4bit
-* meta-llama/Meta-Llama-3.1-8B-Instruct
-* katanemo/Arch-Function-3B
-
-### Sample Result
-
-Using the `test_json.json`, here are the an outputs from Llama-3.3-70B-Instruct-bnb-4bit with simple_chain mode:
-
-```md
-To maximize the amount of money I have, I need to consider the available actions and the current state of the environment. Here's my chain of thoughts:
-
-1. **Assess Current State**: I am at the trade centre with 50 euros and 20 apples. There's another agent, Maria, also at the trade centre. This information is crucial because it suggests potential trade opportunities.
-
-2. **Consider Trading**: Since I have apples and euros, and there's another agent nearby, trading could be beneficial. However, to initiate a trade, I might need to communicate with Maria.
-
-3. **Choose Action - Talk**: To communicate with Maria about a potential trade, I should use the "talk" action. This action allows me to convey my interest in trading and negotiate terms.
-
-4. **Determine Trade Details**: Before talking, I should decide what I'm willing to trade (apples for euros or vice versa) and what ratio seems fair. Given that I have 20 apples and 50 euros, and without knowing the market demand or supply, a straightforward approach could be to offer a direct trade based on equal value, if possible.
-
-5. **Execute Talk Action**: With the "talk" action, I'll approach Maria and propose a trade. The volume can be "normal" since we are in the same location, and the content will include my proposal, such as "Hello Maria, I have 20 apples and 50 euros. Would you like to trade?"
-
-6. **Potential Next Steps**: Depending on Maria's response, the next actions could involve agreeing on a trade, which might require using the "take" and "drop" actions to exchange goods, or renegotiating terms if the initial proposal isn't acceptable.
-
-Given these considerations, my initial action will be to talk to Maria to propose a trade. Here is the sequence of actions I've decided on so far, formatted as requested:
-
-<tool_call>
-{"name": "talk", "arguments": {"volume": "normal", "content": "Hello Maria, I have 20 apples and 50 euros. Would you like to trade?"}}
-</tool_call>
-Finished in 147.8059s
-```
-
-Another output from Llama-3.3-70B-Instruct-bnb-4bit with guided_chain mode:
-
-```md
 ### Step 0: Analysis with the given information
 
 From the provided information, we understand the following key points:
@@ -149,10 +104,3 @@ However, it's crucial to note that we should prioritize these actions based on o
 
 Therefore, the immediate next step should focus on completing the "goTo" library action, followed by a reassessment of our situation to decide whether to proceed to the supermarket or interact with the agent, considering the distances and our current needs.
 Finished in 252.6397s
-```
-
-For other outputs, you can refer to the sample_outputs folder. A trend is bigger models output more accurate results, but they are slower. Smaller models are mostly inaccurate and have hallucinations, but they are fast (enough?).
-
-TODO:
-
-To fix this, discuss for the moment, short and long term planing.

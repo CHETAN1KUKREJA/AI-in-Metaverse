@@ -1,0 +1,100 @@
+you are an LLM agent that is supposed to act like a human character in a virtual environment. you are given some set of actions and your job is to choose the most relevant sequence of actions in order to carry out a task in the environment.
+
+### world description
+The current time in your world is 2024-12-7 15:52, There are a number of locations in your world and their descriptions are as follows:
+The location street is one which can be used to goto other locations and is currently at a distance of -1 from you and you are none/can_see/next_to/inside it. The location supermarket is one which can be used to take objects, drop money equivalent to value and is currently at a distance of 10 from you and you are none/can_see/next_to/inside it. The location library is one which can be used to take books/drop books and is currently at a distance of 25 from you and you are none/can_see/next_to/inside it. The location forest is one which can be used to take apples and is currently at a distance of 40 from you and you are none/can_see/next_to/inside it.
+
+### vicinity description
+there is one object ball of size 2 near you, each of value 2 and you can use it for play. you are not the owner. there is an agent <agentName> at a distance 10 to you. 
+the following audio which may or may not concern you was said in your vicinity:
+ agent <agentName> said to agent <agentName> : hello whats your name?.
+
+### agent description
+
+Your current status:
+- Health: 10
+- Hunger: 3
+- Happiness: 5
+- Age: 23
+- Current Location: street
+- Current Action: goTo(library) (50% completed)
+- Items in Hand: pen (1)
+- Inventory: money (25), apple (1)
+- Ownership: money (25), apple (1), house1 (1), house2 (1)
+
+### contracts description
+
+You are engaged in the following contracts:
+With agent <agentName>, valid until 2025-02-8, you have agreed that:
+<agentName> gives <yourName> 5 money every iteration. <yourName> gives <agentName> 2 apples every iteration.
+
+### system description
+0. Another agent "Marie" was talking, and what you just said "Hello!" is covered. You may need to repeat it.
+1. You must be aware that during your last action "take", some parameters are invalid. Consider whether to extract the valid parameters for "take" and repeat it.
+2. You must be aware that the last action you generated "mumbojumbo" is invaild. You are not allowed to perform it.
+3. You must be aware that the last action you generated "exit" is invaild. You are not allowed to perform it.
+4. You must be aware that during your last action "goto", some parameters are not permitted. Consider whether to extract the permitted parameters for "goto" and repeat it.
+
+### actions description
+Duration descriptor is -1 means that the
+The set of actions available to you are: 
+{"name": "goTo", "description": "goto a location. The duration is not fixed, it depends on where to go", "duration": -1, "parameters": [{"name": "location", "type": "string", "description": "the target location"}]}
+{"name": "take", "description": "take something", "duration": 1, "parameters": [{"name": "objectName", "type": "string", "description": "The object name to take"}]}
+{"name": "drop", "description": "drop something", "duration": 1, "parameters": [{"name": "objectName", "type": "string", "description": "The object name to drop"}]}
+{"name": "talk", "description": "talk to nearby agents. If you want to talk to someone, add his name in the content", "duration": 1, "parameters": [{"name": "volume", "options": ["whisper", "normal", "shout"], "type": "string", "description": "The volume you should talk"}, {"name": "content", "type": "string", "description": "The content you talk"}]}
+
+### end of description
+That's all the information you know for now. If you need information from other agents, you should ask them and wait them to reply. You are not allowed to assume anything yourself.
+
+### goal
+Your goal is always to maximise the amount of money that you have and generate a valid sequence of actions you choose to do at that particular instant of time.
+
+Think step by step. Output what you get and think for each step.
+
+Step 0: Analysis with the given information: world, vicinity, agent, contracts, system and actions. Then, plan what you should do for a short period in nature language regarding your goal. If you don't have information, you have to ask the other agents. You must give an explanation as for the plan.
+
+Step 1: Identify the sequential key actions that are relevant to tool functions and the goal as a list. You must give an explanation as to why you chose the actions. Everytime you identify a key action, extract the required parameters or genreate contents for parameters that matches the context. You must also explain why you select those parameters
+
+Step 2: Using the result from step 1 and 2, format ALL the function calls as JSON objects within XML tags <tool_call></tool_call> with function name and arguments:
+
+<tool_call>
+{"name": <function-name>(, "arguments": <args-json-object>)}
+{"name": <function-name>(, "arguments": <args-json-object>)}
+</tool_call>
+### Step 0: Analysis and Plan
+
+Based on the given information, my goal is to maximize the amount of money I have. To achieve this, I need to consider my current situation:
+
+- I am currently at the "street" location.
+- I have $25 in my inventory.
+- I have a contract with agent <agentName> where I receive $5 every iteration and give 2 apples every iteration.
+- There is a supermarket at a distance of 10 from me, which I can use to take objects or drop money.
+- I have a pen in my hand, but it's not relevant to my goal of maximizing money.
+
+To maximize my money, I should focus on the following strategies:
+
+1. Collect more money by taking it from the supermarket or receiving it from the contract.
+2. Drop apples to give them to the agent and receive money in return.
+
+My plan for a short period is to go to the supermarket, take some money, and then drop some apples to receive more money.
+
+### Step 1: Identify Key Actions and Parameters
+
+1. **goTo**: I need to go to the supermarket to take money. The required parameter is "location", which should be set to "supermarket".
+2. **take**: I need to take money from the supermarket. The required parameter is "objectName", which should be set to "money".
+3. **drop**: I need to drop apples to receive money from the agent. The required parameter is "objectName", which should be set to "apple".
+
+### Step 2: Format Function Calls as JSON Objects within XML Tags
+
+```xml
+<tool_call>
+  {"name": "goTo", "arguments": {"location": "supermarket"}}
+</tool_call>
+<tool_call>
+  {"name": "take", "arguments": {"objectName": "money"}}
+</tool_call>
+<tool_call>
+  {"name": "drop", "arguments": {"objectName": "apple"}}
+</tool_call>
+```
+Finished in 27.3080s

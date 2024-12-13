@@ -108,7 +108,8 @@
             "type": "conflict",
             "during": "talk",
             "details": {
-                "other": "<agentName>"
+                "other": "Marie",
+                "talked_content": "Hello!"
             }
         },
         {
