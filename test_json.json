@@ -54,6 +54,7 @@
         ]
     },
     "agent": {
+        "name": "Test",
         "health": 10,
         "hunger": 3,
         "happiness": 5,

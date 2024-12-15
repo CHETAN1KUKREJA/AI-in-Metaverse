@@ -2,8 +2,6 @@
 
 ## Prompt Engineering
 
-During discussion on 13.12.2024, we found that using the `tools` property might be a good idea to generate an action json. Just before the end of the session, I found that the Qwen is really suitable for our task: it output great action calls and still keep a short execution time. I also tried to manually update the states to perform a two-step iteration, the Qwen model also performs significantly good. Based on these observations, I decided to use the Qwen 7B for now. It takes roughly 4~5 seconds to generate a single action call.
-
 ### Example Prompt
 
 Here is an example prompt for Qwen from the `test_json.json`.
@@ -69,3 +67,9 @@ Sample output:
 To test multi-step planning, a agent input state update is necessary. 
 
 TODO: build a very basic update function for the agent input state.
+
+## Change Logs
+
+* 12.12.2024: Developed the prompt engineering parts with the prompt engineering subgroup members
+* 13.12.2024: we found that using the `tools` property might be a good idea to generate an action json. Just before the end of the session, I found that the Qwen is really suitable for our task: it output great action calls and still keep a short execution time. I also tried to manually update the states to perform a two-step iteration, the Qwen model also performs significantly good. Based on these observations, I decided to use the Qwen 7B for now. It takes roughly 4~5 seconds to generate a single action call.
+* 14.12.2024: I tried the model `NousResearch/Hermes-3-Llama-3.1-8B`. It's even faster (2~3 seconds) and still powerful. I also summarized the LLM stuffs into a backend class called `LLM`. Small update of the goal prompt to let the agent not ignore the talk around it even though it want to maximize its wealth.

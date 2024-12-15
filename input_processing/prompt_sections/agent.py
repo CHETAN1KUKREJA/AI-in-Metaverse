@@ -10,6 +10,7 @@ def get_agent_prompt(agent):
 
     agent_description = ""
     agent_description += "Your current status:\n"
+    agent_description += f"- Name: {agent['name']}\n"
     agent_description += f"- Health: {agent['health']}\n"
     agent_description += f"- Hunger: {agent['hunger']}\n"
     agent_description += f"- Happiness: {agent['happiness']}\n"

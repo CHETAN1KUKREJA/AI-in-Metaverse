@@ -11,7 +11,7 @@ def get_prompt(input_json):
     contracts_list = input_json["contracts"]
     system_list = input_json["system"]
 
-    description_prompt = f"""
+    prompt = f"""
 You are an LLM agent that is supposed to act like a human character in a virtual environment. Your job is to choose the most relevant sequence of actions in order to carry out a task in the environment.
 
 # world description
@@ -31,13 +31,11 @@ You are an LLM agent that is supposed to act like a human character in a virtual
 
 # end of description
 That's all the information you know for now. If you need information from other agents, you have to ask them. You are not allowed to assume anything yourself.
-""".strip()
 
-    goal_prompt = f"""
 # goal
-Your goal is always to maximise the amount of money that you have.
+You should reach the goals with as few steps as possible:
+1. maximize your money
+2. answer the other agent as much as possbile
 """.strip()
-
-    prompt = description_prompt + "\n\n" + goal_prompt + "\n\n"
 
     return prompt
