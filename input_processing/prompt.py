@@ -34,8 +34,10 @@ That's all the information you know for now. If you need information from other 
 
 # goal
 You should reach the goals with as few steps as possible:
-1. maximize your money
+1. earn money
 2. answer the other agent as much as possbile
+
+Think step by step. Output what you think.
 """.strip()
 
     return prompt

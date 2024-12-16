@@ -1,257 +1,80 @@
 {
     "world": {
-        "datetime": "2024-12-7 15:52",
+        "datetime": "15.12.2024 10am",
         "locations": [
             {
-                "name": "street",
-                "usage": "goto other locations",
+                "name": "market",
+                "usage": "trade objects with other agents",
                 "distance": -1,
-                "range": "none/can_see/next_to/inside"
-            },
-            {
-                "name": "supermarket",
-                "usage": "take objects, drop money equivalent to value",
-                "distance": 10,
-                "range": "none/can_see/next_to/inside"
-            },
-            {
-                "name": "library",
-                "usage": "take books/drop books",
-                "distance": 25,
-                "range": "none/can_see/next_to/inside"
+                "range": "next_to"
             },
             {
                 "name": "forest",
-                "usage": "take apples",
-                "distance": 40,
-                "range": "none/can_see/next_to/inside"
+                "usage": "may exist fruits to pick",
+                "distance": -1,
+                "range": "next_to"
+            },
+            {
+                "name": "outside",
+                "usage": "go to locations such as market and forest",
+                "distance": -1,
+                "range": "inside"
             }
         ]
     },
     "vicinity": {
-        "objects": [
-            {
-                "name": "ball",
-                "size": 2,
-                "amount": 1,
-                "owner": "false",
-                "value": 2,
-                "usage": "play"
-            }
-        ],
-        "agents": [
-            {
-                "name": "<agentName>",
-                "distance": 10
-            }
-        ],
-        "audio": [
-            {
-                "to": "<agentName>",
-                "from": "<agentName>",
-                "content": "hello whats your name?"
-            }
-        ]
+        "objects": [],
+        "agents": [],
+        "audio": []
     },
     "agent": {
-        "name": "Test",
-        "health": 10,
+        "name": "Bob",
+        "health": 20,
         "hunger": 3,
         "happiness": 5,
-        "location": "street",
+        "location": "outside",
         "currentAction": "None",
-        "actionProgress": "-1",
+        "actionProgress": -1,
         "age": 23,
         "hands": [
             {
-                "name": "pen",
-                "amount": 1
+                "name": "money",
+                "amount": 10
             }
         ],
-        "inventory": [
-            {
-                "name": "money",
-                "amount": 25
-            },
-            {
-                "name": "apple",
-                "amount": 1
-            }
-        ],
-        "ownership": [
-            {
-                "name": "money",
-                "amount": 25
-            },
-            {
-                "name": "apple",
-                "amount": 1
-            },
-            {
-                "name": "house1",
-                "amount": 1
-            },
-            {
-                "name": "house2",
-                "amount": 1
-            }
-        ]
+        "inventory": [],
+        "ownership": []
     },
-    "contracts": [
-        {
-            "other": "<agentName>",
-            "expires": "2025-02-8",
-            "content": "<agentName> gives <yourName> 5 money every iteration. <yourName> gives <agentName> 2 apples every iteration."
-        }
-    ],
-    "system": [
-        {
-            "type": "conflict",
-            "during": "talk",
-            "details": {
-                "other": "Marie",
-                "talked_content": "Hello!"
-            }
-        },
-        {
-            "type": "invalid-parameter-name",
-            "during": "take",
-            "details": {}
-        },
-        {
-            "type": "invalid-action-name",
-            "during": "mumbojumbo",
-            "details": {}
-        },
-        {
-            "type": "action-not-permitted",
-            "during": "exit",
-            "details": {}
-        },
-        {
-            "type": "parameter-not-permitted",
-            "during": "goto",
-            "details": {}
-        }
-    ],
+    "contracts": [],
+    "system": [],
     "actions": [
         {
             "name": "go_to",
-            "description": "goto a location. The duration is not fixed, it depends on where to go",
-            "duration": -1,
-            "available": true,
-            "parameters": [
-                {
-                    "name": "location",
-                    "type": "string",
-                    "description": "the target location"
-                }
-            ]
-        },
-        {
-            "name": "take",
-            "description": "take something",
-            "duration": 1,
-            "available": true,
-            "parameters": [
-                {
-                    "name": "objectName",
-                    "type": "string",
-                    "description": "The object name to take"
-                }
-            ]
-        },
-        {
-            "name": "drop",
-            "description": "drop something",
-            "duration": 1,
-            "available": true,
-            "parameters": [
-                {
-                    "name": "objectName",
-                    "type": "string",
-                    "description": "The object name to drop"
-                }
-            ]
+            "available": true
         },
         {
             "name": "talk",
-            "description": "talk to nearby agents. If you want to talk to someone, add his name in the content",
-            "duration": 1,
-            "available": true,
-            "parameters": [
-                {
-                    "name": "volume",
-                    "options": [
-                        "whisper",
-                        "normal",
-                        "shout"
-                    ],
-                    "type": "string",
-                    "description": "The volume you should talk"
-                },
-                {
-                    "name": "content",
-                    "type": "string",
-                    "description": "The content you talk"
-                }
-            ]
+            "available": true
         },
         {
-            "name": "message",
-            "description": "message with someone or a group of people of all the people using social media",
-            "duration": 3,
-            "available": false,
-            "parameters": [
-                {
-                    "name": "to",
-                    "options": [
-                        "all",
-                        "<groupname>",
-                        "<agentname>"
-                    ],
-                    "type": "string",
-                    "description": "The target agents. 'all' means all the agent, <groupname> means a target group of agents, <agentname> is an agent name"
-                },
-                {
-                    "name": "content",
-                    "type": "string",
-                    "description": "The content you message"
-                }
-            ]
+            "name": "take",
+            "available": true
+        },
+        {
+            "name": "drop",
+            "available": true
         },
         {
             "name": "enter",
-            "description": "enter a location",
-            "duration": 2,
-            "available": false,
-            "parameters": [
-                {
-                    "name": "location",
-                    "type": "string",
-                    "description": "The location you enter"
-                }
-            ]
+            "available": true
         },
         {
             "name": "exit",
-            "description": "exit the location you just entered, or the location where you were",
-            "duration": 2,
-            "available": false,
-            "parameters": []
+            "available": true
         },
         {
             "name": "play",
-            "description": "play something",
-            "duration": -1,
-            "available": false,
-            "parameters": [
-                {
-                    "name": "objectname",
-                    "type": "string",
-                    "description": "The object name you play with"
-                }
-            ]
+            "available": false
         }
     ]
 }

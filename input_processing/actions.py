@@ -2,62 +2,51 @@ import json
 
 
 def go_to(
-    explanation_for_this_action: str,
     location: str,
-    explanation_for_location: str,
 ):
     """
-    Go to a location from parameter, but not enter it.
+    Go to a location from parameter. It can only be used when you are \"outside\". Use enter() to really enter the location.
 
     Args:
         location: The location to go to
-        explanation_for_this_action: You have to explain briefly why you choose this action
-        explanation_for_location: You have to explain briefly why you choose this location
-    Returns:
-        No return
     """
 
 
 def take(
-    explanation_for_this_action: str,
+    analysis_state: str,
+    explanation_for_this_action_and_arguments: str,
     objectName: str,
-    explanation_for_object_name: str,
 ):
     """
     Take the object with the objectName parameter with you.
 
     Args:
         objectName: The name of the object to take with you
-        explanation_for_this_action: You have to explain briefly why you choose this action
-        explanation_for_object_name: You have to explain briefly why you choose this object name
-    Returns:
-        No return
+        analysis_state: You have to analysis your current state
+        explanation_for_this_action_and_arguments: You have to explain why you choose this action and the corresponding arguments
     """
     
     
 def drop(
-    explanation_for_this_action: str,
+    analysis_state: str,
+    explanation_for_this_action_and_arguments: str,
     objectName: str,
-    explanation_for_object_name: str,
 ):
     """
     Drop the object with the objectName parameter.
 
     Args:
         objectName: The name of the object to to drop
-        explanation_for_this_action: You have to explain briefly why you choose this action
-        explanation_for_object_name: You have to explain briefly why you choose this object name
-    Returns:
-        No return
+        analysis_state: You have to analysis your current state
+        explanation_for_this_action_and_arguments: You have to explain why you choose this action and the corresponding arguments
     """
 
 
 def talk(
-    explanation_for_this_action: str,
+    analysis_state: str,
+    explanation_for_this_action_and_arguments: str,
     other_agent: str,
-    explanation_for_other_agent: str,
     message: str,
-    explanation_for_message: str,
 ):
     """
     Talk with another angent. If you are asking questions, and need to hear the reply, you have to stop and wait.
@@ -65,55 +54,44 @@ def talk(
     Args:
         other_agent: The acutal name of agent to talk to.
         message: the message to be talked.
-        explanation_for_this_action: You have to explain briefly why you choose this action
-        explanation_for_other_agent: You have to explain briefly why you choose to talk to this agent
-        explanation_for_message: You have to explain briefly how you generate the message
-    Returns:
-        No return
+        analysis_state: You have to analysis your current state
+        explanation_for_this_action_and_arguments: You have to explain why you choose this action and the corresponding arguments
     """
 
 def enter(
-    explanation_for_this_action: str,
     location: str,
-    explanation_for_location: str,
 ):
     """
-    Enter a location from parameter.
+    Enter a location from parameter if you are next to it.
 
     Args:
-        location: The location to go to
-        explanation_for_this_action: You have to explain briefly why you choose this action
-        explanation_for_location: You have to explain briefly why you choose this location
-    Returns:
-        No return
+        location: The location to enter
     """
 
 def exit(
-    explanation_for_this_action: str,
+    analysis_state: str,
+    explanation_for_this_action_and_arguments: str,
 ):
     """
     Exit the location you just entered. Must be used after enter().
 
     Args:
-        explanation_for_this_action: You have to explain briefly why you choose this action
-    Returns:
-        No return
+        analysis_state: You have to analysis your current state
+        explanation_for_this_action_and_arguments: You have to explain why you choose this action and the corresponding arguments
     """
 
 def play(
-    explanation_for_this_action: str,
+    analysis_state: str,
+    explanation_for_this_action_and_arguments: str,
     objectName: str,
-    explanation_for_object_name: str,
 ):
     """
     Play the object with the objectName parameter.
 
     Args:
         objectName: The name of the object to to drop
-        explanation_for_this_action: You have to explain briefly why you choose this action
-        explanation_for_object_name: You have to explain briefly why you choose this object name
-    Returns:
-        No return
+        analysis_state: You have to analysis your current state
+        explanation_for_this_action_and_arguments: You have to explain why you choose this action and the corresponding arguments
     """
 
 tools = [go_to, take, drop, play, enter, exit, talk]

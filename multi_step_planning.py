@@ -38,10 +38,11 @@ if __name__ == "__main__":
     if args.profiling:
         start_time = time.time()
         
-    input_state = simulator.get_agent_input_state()
-    print(json.dumps(input_state, indent=2))
-    call_batch = llm.iterate_step([input_state])
-    print(call_batch[0])
+    for i in range(3):
+        input_state = simulator.get_agent_input_state()
+        call_batch = llm.iterate_step([input_state])
+        print(call_batch[0])
+        simulator.update_state(json.loads(call_batch[0]))
 
     if args.profiling:
         end_time = time.time()
