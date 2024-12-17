@@ -2,7 +2,7 @@
 import argparse
 import time
 import json
-from backend.llm import LLM
+from backend.planer import Planer
 from simulation.simulator import Simulator
 
 def parse_args():
@@ -32,7 +32,7 @@ def parse_args():
 if __name__ == "__main__":
     args = parse_args()
 
-    llm = LLM(args.model)
+    llm = Planer(args.model)
     simulator = Simulator()
     
     if args.profiling:

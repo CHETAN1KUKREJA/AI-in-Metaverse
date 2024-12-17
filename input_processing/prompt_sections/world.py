@@ -29,5 +29,7 @@ def get_world_prompt(input_json):
                 ret += f"- You can see it. It {location['distance']:.1f} away from you."
             case "inside":
                 ret += f"- You are currently inside it."
+            case "none":
+                ret += f"- You can not see it because you are now in another location."
         ret += "\n"
     return ret

@@ -11,8 +11,17 @@ def get_prompt(input_json):
     contracts_list = input_json["contracts"]
     system_list = input_json["system"]
 
+    function_str = r"""
+You can perform one of the following action:
+1. go_to <location>: you can go to the nearby of a location if you are now \"outside\".
+2. enter <location>: you can enter a location if you are near to it, 
+3. exit: you can exit the location you entered
+3. take <amount> of <object>: you can pick some amount of objects if it exist in the vicinity
+4. drop <amount> of <object>: you can drop some amount of objects from you.
+"""
+
     prompt = f"""
-You are an LLM agent that is supposed to act like a human character in a virtual environment. Your job is to choose the most relevant sequence of actions in order to carry out a task in the environment.
+You are a helpful assistant. You are given with following information:
 
 # world description
 {get_world_prompt(world_dict)}
@@ -26,18 +35,21 @@ You are an LLM agent that is supposed to act like a human character in a virtual
 # contracts description
 {get_contracts_prompt(contracts_list)}
 
-# system description
+# error description
 {get_system_prompt(system_list)}
 
-# end of description
-That's all the information you know for now. If you need information from other agents, you have to ask them. You are not allowed to assume anything yourself.
+{function_str}
 
-# goal
-You should reach the goals with as few steps as possible:
-1. earn money
-2. answer the other agent as much as possbile
+That's all the information you know for now. If you need information from other agents, you have to ask them. 
 
-Think step by step. Output what you think.
+# rules
+You should follow the rules:
+0. assume is not allowed
+1. get more money
+2. be flexible, if you failed to do something, try something else
+3. answer the other agent as much as possbile
+
+Think as chain of thoughts. Output shortly what you think. You must pay attention to the current state and vicinity. Finally output the action in a new line with the format \"Action: <action>\".
 """.strip()
 
     return prompt

@@ -5,7 +5,7 @@ def go_to(
     location: str,
 ):
     """
-    Go to a location from parameter. It can only be used when you are \"outside\". Use enter() to really enter the location.
+    Go to a location.
 
     Args:
         location: The location to go to
@@ -13,85 +13,63 @@ def go_to(
 
 
 def take(
-    analysis_state: str,
-    explanation_for_this_action_and_arguments: str,
     objectName: str,
 ):
     """
-    Take the object with the objectName parameter with you.
+    Take the object.
 
     Args:
         objectName: The name of the object to take with you
-        analysis_state: You have to analysis your current state
-        explanation_for_this_action_and_arguments: You have to explain why you choose this action and the corresponding arguments
     """
     
     
 def drop(
-    analysis_state: str,
-    explanation_for_this_action_and_arguments: str,
     objectName: str,
 ):
     """
-    Drop the object with the objectName parameter.
+    Drop the object.
 
     Args:
         objectName: The name of the object to to drop
-        analysis_state: You have to analysis your current state
-        explanation_for_this_action_and_arguments: You have to explain why you choose this action and the corresponding arguments
     """
 
 
 def talk(
-    analysis_state: str,
-    explanation_for_this_action_and_arguments: str,
     other_agent: str,
     message: str,
 ):
     """
-    Talk with another angent. If you are asking questions, and need to hear the reply, you have to stop and wait.
+    Talk with existing angent. The agent must appears in the information given. If you are asking questions, and need to hear the reply, you have to stop and wait.
 
     Args:
-        other_agent: The acutal name of agent to talk to.
+        other_agent: The name of agent to talk to. The agent must exist.
         message: the message to be talked.
-        analysis_state: You have to analysis your current state
-        explanation_for_this_action_and_arguments: You have to explain why you choose this action and the corresponding arguments
     """
 
 def enter(
     location: str,
 ):
     """
-    Enter a location from parameter if you are next to it.
-
+    Enter a location.
+    
     Args:
         location: The location to enter
     """
 
 def exit(
-    analysis_state: str,
-    explanation_for_this_action_and_arguments: str,
 ):
     """
-    Exit the location you just entered. Must be used after enter().
-
-    Args:
-        analysis_state: You have to analysis your current state
-        explanation_for_this_action_and_arguments: You have to explain why you choose this action and the corresponding arguments
+    exit the location.
     """
 
 def play(
-    analysis_state: str,
-    explanation_for_this_action_and_arguments: str,
     objectName: str,
 ):
     """
-    Play the object with the objectName parameter.
+    Play the object.
 
     Args:
         objectName: The name of the object to to drop
-        analysis_state: You have to analysis your current state
-        explanation_for_this_action_and_arguments: You have to explain why you choose this action and the corresponding arguments
     """
 
 tools = [go_to, take, drop, play, enter, exit, talk]

@@ -40,24 +40,26 @@ class World:
     def vicinity_description(self, target_agent):
         location = target_agent.location
         object_list, agent_list, audio_list = [], [], []
-        for object in location.objects:
-            if get_distance(object.pos, target_agent.pos) < 3:
+        for object in location.objects.values():
+            if get_distance(object.pos, target_agent.pos) < 1e9:
                 entry = {}
                 entry["name"] = object.name
                 entry["amount"] = object.amount
+                entry["size"] = object.size
+                entry["usage"] = object.usage
                 object_list.append(entry)
                 
-        for agent in location.agents:
+        for agent in location.agents.values():
             if target_agent.name == agent.name:
                 continue
-            if get_distance(agent.pos, target_agent.pos) < 3:
+            if get_distance(agent.pos, target_agent.pos) < 1e9:
                 entry = {}
                 entry["name"] = agent.name
                 entry["distance"] = get_distance(agent.pos, target_agent.pos)
                 agent_list.append(entry)
                 
-        for audio in location.audios:
-            if get_distance(audio.agent_from.pos, target_agent.pos) < 3:
+        for audio in location.audios.values():
+            if get_distance(audio.agent_from.pos, target_agent.pos) < 1e9:
                 entry = {}
                 entry["from"] = audio.agent_from.name
                 entry["content"] = audio.content

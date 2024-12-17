@@ -1,5 +1,5 @@
 class Location:
-    def __init__(self, name, usage, pos=(0,0), agents=[], objects=[], audios=[]):
+    def __init__(self, name, usage, pos=(0,0), agents={}, objects={}, audios={}):
         self.name = name
         self.usage = usage
         self.pos = pos
