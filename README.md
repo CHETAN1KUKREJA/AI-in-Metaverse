@@ -66,7 +66,7 @@ Sample output:
 
 To test multi-step planning, a agent input state update is necessary. 
 
-I build a very basic simulate tool for the agent input state. 
+I build a very basic simulate tool for the agent input state. ~~(Game Engineering team aren't fast enough, software simulation would be better for now :/ )~~
 
 `Qwen/Qwen2.5-14B-Instruct` is used for planning and `Qwen/Qwen2.5-7B-Instruct` for summaizing. This is the most balanced conbination for now. Less powerful model will lead to a terriable planing and summaizing. More powerful model will cost more time.
 
