@@ -1,0 +1,38 @@
+from backend.slot_filling.planer import Planer
+from backend.slot_filling.summarizer import LLMSummarizer, PatternSummarizer
+import json
+
+# Qwen/Qwen2.5-7B-Instruct
+# Qwen/Qwen2.5-14B-Instruct
+# unsloth/Qwen2.5-14B-Instruct-bnb-4bit
+# Qwen/Qwen2.5-14B-Instruct-AWQ
+
+class LLM:
+    def __init__(self, planer_model_path="Qwen/Qwen2.5-14B-Instruct-AWQ", summarizer_model_path=None):
+        self.planer = Planer(planer_model_path)
+        self.summarizer = LLMSummarizer(summarizer_model_path) if summarizer_model_path is not None else PatternSummarizer()
+        
+        self.memory = []
+        
+    def update_memory(self, call_batch):
+        call = call_batch[0]
+        match call["name"]:
+            case "go_to":
+                # mem = f"You go to {call['arguments']['location']}, the reason is: {call['arguments']['explanation_for_this_action_and_arguments']}"
+                mem = f"You go to {call['arguments']['location']}. Now you are near to it, but still not in it."
+            case "enter":
+                mem = f"You enter {call['arguments']['location']}."
+            case "talk":
+                mem = f"You try to talk with \"{call['arguments']['other_agent']}\". But \"{call['arguments']['other_agent']}\" doesn't exist here!"
+            case "take":
+                mem = f"You just toke {call['arguments']['amount']} of {call['arguments']['objectName']} from nearby."
+            case "exit":
+                mem = f"You exit. Now you are outside again."
+            
+        self.memory.append(mem)
+        
+    def iterate_step(self, input_jsons):
+        response_batch = self.planer.iterate_step(input_jsons, self.memory)
+        call_batch = self.summarizer.iterate_step(response_batch)
+        self.update_memory(call_batch)
+        return call_batch

@@ -1,14 +1,16 @@
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain.agents import create_json_chat_agent, AgentExecutor
 
-from backend.langchain.custom_llm_mistral import llm_mistral
-# from backend.langchain.custom_llm_qwen import llm_qwen
 from backend.langchain.input_prompt import prompt_example, human, system
 from backend.langchain.tools import *
 
 
 class LLM:
     def __init__(self):
+        # prevent load unnecessary model
+        from backend.langchain.custom_llm_mistral import llm_mistral
+        # from backend.langchain.custom_llm_qwen import llm_qwen
+        
         self.prompt_system = ChatPromptTemplate.from_messages(
             [
                 ("system", system),
