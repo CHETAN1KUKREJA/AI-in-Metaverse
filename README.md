@@ -76,7 +76,7 @@ A very basic simulate tool is build for the agent input state.
 
 To reuse the pretrained target objective and decrease the output token as much as possible, a slot filling method is designed to let the LLM fill in the pattern like: "take \<amount\> of \<object\>". There is a pretrained objective for this blank filling so LLM should be very familar with it. In addition, this also reduce the output, since the json call structure (characters like ", {, } and sturctural key names) consumes lots of tokens.
 
-`Qwen/Qwen2.5-14B-Instruct` and is used for testing planning. This is the most balanced conbination for now. Less powerful model will lead to a terriable planing and summaizing. More powerful model will cost more time. It uses ~32GB VRAM.
+`Qwen/Qwen2.5-14B-Instruct` and is used for testing planning. This is the most balanced conbination for now. Less powerful model will lead to a terriable planing and summaizing. More powerful model will cost more time. It uses \~32GB VRAM.
 
 Usage:
 
@@ -93,7 +93,7 @@ python tests/single_step_planning.py
 python tests/single_step_summarizing.py
 ```
 
-Here are a sample output. It's very reasonable and fast (average ~5s, worst ~10s, best ~3s)
+Here are a sample output. It's very reasonable and fast (average \~5s, worst \~10s, best \~3s)
 
 ```
 ############################################
@@ -131,7 +131,7 @@ Finished in 6.0410s
 ############################################
 ```
 
-Some quantization of `Qwen/Qwen2.5-14B-Instruct` is also tested. `Qwen/Qwen2.5-14B-Instruct-AWQ` is a very good one, because it slightly faster than the original model but takes only ~12GB VRAM! The average runtime is only 3~4s!
+Some quantization of `Qwen/Qwen2.5-14B-Instruct` is also tested. `Qwen/Qwen2.5-14B-Instruct-AWQ` is a very good one, because it slightly faster than the original model but takes only \~12GB VRAM! The average runtime is only 3\~4s!
 
 ```
 ############################################
@@ -236,7 +236,7 @@ Finished in 8.2450s
 Finished in 13.0836s
 ```
 
-We test it for the sample setup 5 times, 4 of the outputs are trying to talk with itself, only a single one is reasonable `go_to market`. The average running time is ~8s.
+We test it for the sample setup 5 times, 4 of the outputs are trying to talk with itself, only a single one is reasonable `go_to market`. The average running time is \~8s.
 
 We have test to include the Qwen LLM inside of langchain, currently it cannot stop at the position we want and it's even slower. (Should we still go ahead to fix and test it?)
 
