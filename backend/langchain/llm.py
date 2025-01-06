@@ -54,7 +54,7 @@ class LLM:
             Json_output_calls = []
             
             # TODO: use the real prompt
-            prompt = prompt_example
+            prompt = input_json
             
             for step in self.agent_executor.stream({"input": prompt}):
                 print(step)

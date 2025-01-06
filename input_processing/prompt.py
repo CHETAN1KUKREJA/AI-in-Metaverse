@@ -3,7 +3,7 @@ from input_processing.prompt_sections.vicinity import get_vicinity_prompt
 from input_processing.prompt_sections.agent import get_agent_prompt
 from input_processing.prompt_sections.contrast import get_contracts_prompt
 from input_processing.prompt_sections.system import get_system_prompt
-from input_processing.actions import get_action_prompts
+# from input_processing.actions import get_action_prompts
 
 # chain_mode from ["simple_chain", "guided_chain", "deep_guided_chain"]
 def get_prompt(input_json, chain_mode="guided_chain"):
@@ -24,7 +24,7 @@ The current time in your world is {world_dict['datetime']}, There are a number o
 ### vicinity description
 {get_vicinity_prompt(vicinity_dict)}
 
-### agent description
+### your agent description
 {get_agent_prompt(agent_dict)}
 
 ### contracts description
@@ -32,9 +32,6 @@ The current time in your world is {world_dict['datetime']}, There are a number o
 
 ### system description
 {get_system_prompt(system_list)}
-
-### actions description
-{get_action_prompts(actions_list)}
 
 ### end of description
 That's all the information you know for now. If you need information from other agents, you should ask them and wait them to reply. You are not allowed to assume anything yourself.
@@ -47,13 +44,7 @@ Your goal is always to maximise the amount of money that you have and generate a
 
     # Vayun's base version
     task_prompt_simple_chain = f"""
-The output you must generate must be a Chain-of-thoughts which consist of valid thought action pairs in a specific sequence. For each action you pick you must give an explanation as to why you chose it and finally combine all the actions to form a list/sequence and output it after the Chain-of-thoughts. The final sequence must be a valid JSON response within XML tags <tool_call></tool_call> with function name and arguments:
-
-<tool_call>
-{{"name": <function-name>(, "arguments": <args-json-object>)}}
-{{"name": <function-name>(, "arguments": <args-json-object>)}}
-...
-</tool_call>
+The output you must generate must be a Chain-of-thoughts which consist of valid thought action pairs in a specific sequence. For each action you pick you must give an explanation as to why you chose it and finally combine all the actions to form a list/sequence and output it after the Chain-of-thoughts.
 """.strip()
 
     # Jiong's revision

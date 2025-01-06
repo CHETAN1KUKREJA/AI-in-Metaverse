@@ -8,8 +8,6 @@ Install the conda environment according to the `environment_setup.md`
 
 ### Example Prompt
 
-TODO: This prompt is out of date. Need update
-
 Here is an example prompt for Qwen from the `test_json.json`.
 
 ```text
@@ -58,13 +56,13 @@ Your goal is always to maximise the amount of money that you have.
 
 ### Testing
 
-We provide the `single_step_planning.py` to test the prompt for a single step planning. You can test it on a local Qwen or Langchain with Mistral. Currently tested models are `Qwen [3B, 7B, 14B]` and `Mistral[7B]`.
+We provide the `single_step_planning.py` to test the prompt for a single step planning. You can test it on a local Qwen or Langchain with Mistral. Currently tested models are `Qwen [3B, 7B, 14B]` and `Mistral[7B]` with langchain.
 
 Sample output:
 
 ```markdown
 <tool_call>
-{"name": "go_to", "arguments": {"explanation_for_this_action": "I need to move closer to the supermarket to potentially trade apples for money.", "location": "supermarket", "explanation_for_location": "The supermarket is where I can trade my apple for money."}}
+{"name": "go_to", "arguments": {"location": "supermarket"}}
 </tool_call>
 ```
 
@@ -133,43 +131,43 @@ Finished in 6.0410s
 ############################################
 ```
 
-Some quantization of `Qwen/Qwen2.5-14B-Instruct` is also tested. `Qwen/Qwen2.5-14B-Instruct-AWQ` is a very good one, because it slightly faster than the original model but takes only ~12GB VRAM!
+Some quantization of `Qwen/Qwen2.5-14B-Instruct` is also tested. `Qwen/Qwen2.5-14B-Instruct-AWQ` is a very good one, because it slightly faster than the original model but takes only ~12GB VRAM! The average runtime is only 3~4s!
 
 ```
 ############################################
-I am currently outside and my goal is to get more money. Since the market is closed and I don't have any items to trade, I should head to the forest to gather fruits that could potentially be traded later.
+I am currently outside and my goal is to get more money. Since the market is closed and I don't have any items to trade right now, I should head to the forest to gather fruits which could be valuable for trading later.
 
 Action: go_to forest
 [{'name': 'go_to', 'arguments': {'location': 'forest'}}]
-Finished in 6.4316s
+Finished in 4.3896s
 ############################################
-I am near the forest and can pick fruits to trade later. Since I don't have any fruits yet, I should enter the forest to gather some.
+I am near the forest and can pick fruits to potentially earn more money. Since I don't have any fruits yet, I should enter the forest to start picking.
 
 Action: enter forest
 [{'name': 'enter', 'arguments': {'location': 'forest'}}]
-Finished in 4.0120s
+Finished in 3.1312s
 ############################################
-I am currently in the forest and I have 5 apples nearby. Since I already have money, picking up the apples could be useful for trading later.
+I am currently in the forest and I have 5 apples nearby. Since I already have money, picking up the apples could be useful for trading later. 
 
 Action: take 5 of apple
 [{'name': 'take', 'arguments': {'amount': '5', 'objectName': 'apple'}}]
-Finished in 4.4323s
+Finished in 3.3090s
 ############################################
-I have already picked 5 apples, which means I don't need to pick more right now. Since my goal is to get more money, I should consider going to the market when it reopens or look for other opportunities to earn money. However, since the market is closed, I will exit the forest and check if there are any other options available.
+I have already picked 5 apples, and I have 10 units of money. Since I am in the forest and have already picked the available apples, I should consider going back outside or to another location like the market when it reopens. For now, I will exit the forest.
 
 Action: exit
 [{'name': 'exit', 'arguments': {}}]
-Finished in 7.6802s
+Finished in 4.7610s
 ############################################
-I have already picked 5 apples from the forest and am now back outside. Since I have enough apples for now, I should consider going to the market when it reopens to trade my apples for more money. For now, I will stay outside and look for other opportunities.
+I have already picked 5 apples from the forest and am now back outside. Since I have enough apples for now, I should consider going to the market when it reopens to trade my apples for more money. For now, I don't have any immediate action to take since the market is closed.
 
-Action: wait
+Action: None
 Traceback (most recent call last):
-  File "/data/home/liujio/llm-backend/multi_step_planning.py", line 42, in <module>
+  File "/home/student1/llm-backend/tests/multi_step_planning.py", line 43, in <module>
     call_batch = llm.iterate_step([input_state])
-  File "/data/home/liujio/llm-backend/backend/slot_filling/llm.py", line 37, in iterate_step
+  File "/home/student1/llm-backend/backend/slot_filling/llm.py", line 37, in iterate_step
     self.update_memory(call_batch)
-  File "/data/home/liujio/llm-backend/backend/slot_filling/llm.py", line 19, in update_memory
+  File "/home/student1/llm-backend/backend/slot_filling/llm.py", line 19, in update_memory
     match call["name"]:
 TypeError: 'NoneType' object is not subscriptable
 ```
@@ -178,41 +176,69 @@ One disadvantage is that it's hallucinating a little bit with a chance. But if r
 
 ```
 ############################################
-I am currently outside and my goal is to get more money. To achieve this, I should head to the forest to gather fruits, which I can later trade for money. My last action was none, so moving to the forest makes sense.
+I am currently outside and my goal is to get more money. Since the market is closed and I don't have any items to trade, I should head to the forest to gather fruits which could be valuable for trading when the market reopens.
 
 Action: go_to forest
 [{'name': 'go_to', 'arguments': {'location': 'forest'}}]
-Finished in 6.8846s
+Finished in 4.4199s
 ############################################
-I am near the forest and can pick fruits to potentially trade later. Since I don't have any fruits yet, I should enter the forest and start picking fruits.
+I am near the forest and can pick fruits to potentially trade for more money later. Since I don't have any fruits yet, I should enter the forest to start picking.
 
 Action: enter forest
 [{'name': 'enter', 'arguments': {'location': 'forest'}}]
-Finished in 4.1813s
+Finished in 3.2208s
 ############################################
-I am currently in the forest and I have 5 apples nearby. Since I don't have any items in my inventory yet, I should take the apples. This will allow me to potentially trade them later for more money.
+I am currently in the forest and I have 5 apples nearby. Since I already have money, picking up the apples could be useful for trading later. 
 
 Action: take 5 of apple
 [{'name': 'take', 'arguments': {'amount': '5', 'objectName': 'apple'}}]
-Finished in 5.5992s
+Finished in 3.2725s
 ############################################
-I have already picked 5 apples, and I have 10 units of money. Since I am in the forest and have already picked the available apples, I should consider going back outside to see if there are other opportunities to gather resources or find a way to increase my money.
+I have already picked 5 apples from the forest, and I currently have 10 money. Since I am at the maximum capacity for apples, I should consider exiting the forest to either trade or find another resource.
 
 Action: exit
 [{'name': 'exit', 'arguments': {}}]
-Finished in 6.3088s
+Finished in 3.7640s
 ############################################
-I have already picked 5 apples from the forest and am now back outside. Since I already have apples, I should consider going to the market when it reopens to trade for more money. For now, I don't have any other options available.
+I have already picked 5 apples from the forest and am back outside. Since I already have apples and am not near any other source of items or locations where I can trade, I should consider going to the market when it reopens to potentially earn more money.
 
-Action: go_to market
-[{'name': 'go_to', 'arguments': {'location': 'market'}}]
-Finished in 5.9454s
+However, since the market is currently closed, my best option might be to return to the forest to gather more apples for trading later.
+
+Action: go_to forest
+[{'name': 'go_to', 'arguments': {'location': 'forest'}}]
+Finished in 6.1117s
 ############################################
 ```
 
 ### Langchain Method
 
-TODO: Also test langchain Mistral here
+We also tried Langchain framework with inner LLM `Mistral-7B-Instruct`. It is not as intelligent as the above `Qwen2.5-14B-Instruct`, so it's halllucinating most of the time. Also it's even slower than `Qwen2.5-14B-Instruct`. Here is some sample outputs:
+
+```
+{'actions': [AgentAction(tool='talk', tool_input={'agent_name': 'George', 'message': 'I would like to know if the market is open and if there are any agents there.'}, log='```json\n{"thought": "The \'market\' location is currently closed and there are no agents there. The \'forest\' location is where I can pick fruit to trade. I can go to \'outside\' from my current location. I have 10 units of money and can trade using my \'money\' hand. I need to eat to increase my health and happiness. I can collect apples to add to my inventory.",\n "action": "talk",\n "action_input": {\n    "agent_name": "George",\n    "message": "I would like to know if the market is open and if there are any agents there."\n  }\n}```')], 'messages': [AIMessage(content='```json\n{"thought": "The \'market\' location is currently closed and there are no agents there. The \'forest\' location is where I can pick fruit to trade. I can go to \'outside\' from my current location. I have 10 units of money and can trade using my \'money\' hand. I need to eat to increase my health and happiness. I can collect apples to add to my inventory.",\n "action": "talk",\n "action_input": {\n    "agent_name": "George",\n    "message": "I would like to know if the market is open and if there are any agents there."\n  }\n}```', additional_kwargs={}, response_metadata={})]}
+[{'action': 'talk', 'action_input': {'agent_name': 'George', 'message': 'I would like to know if the market is open and if there are any agents there.'}}]
+Finished in 11.2823s
+
+{'actions': [AgentAction(tool='talk', tool_input={'agent_name': 'George', 'message': "I'd like to know if the market is open or when it will reopen."}, log='```json\n{"thought": "The query contains information about various locations, the user\'s current location, and the user\'s current state. The \'market\' location is currently closed and no agents are present. The \'forest\' location is at a greater distance but can be seen and fruit can be picked and used for trade. The user\'s current location is \'outside\'. The user\'s hunger level is 3 and they have 10 units of money.",\n "action": "talk",\n "action_input": {\n   "agent_name": "George",\n   "message": "I\'d like to know if the market is open or when it will reopen."\n }\n}```')], 'messages': [AIMessage(content='```json\n{"thought": "The query contains information about various locations, the user\'s current location, and the user\'s current state. The \'market\' location is currently closed and no agents are present. The \'forest\' location is at a greater distance but can be seen and fruit can be picked and used for trade. The user\'s current location is \'outside\'. The user\'s hunger level is 3 and they have 10 units of money.",\n "action": "talk",\n "action_input": {\n   "agent_name": "George",\n   "message": "I\'d like to know if the market is open or when it will reopen."\n }\n}```', additional_kwargs={}, response_metadata={})]}
+[{'action': 'talk', 'action_input': {'agent_name': 'George', 'message': "I'd like to know if the market is open or when it will reopen."}}]
+Finished in 6.2222s
+
+{'actions': [AgentAction(tool='goto', tool_input={'location': 'market', 'speed': 1}, log='```json\n{"thought": "The query contains information about locations, the current agent\'s position, and the available actions. I will first try to go to the market to check if it\'s open and if there are any agents there. If not, I will go to the forest to pick some fruit and trade with other agents.",\n "action": "goto",\n "action_input": {"location": "market", "speed": 1}}```')], 'messages': [AIMessage(content='```json\n{"thought": "The query contains information about locations, the current agent\'s position, and the available actions. I will first try to go to the market to check if it\'s open and if there are any agents there. If not, I will go to the forest to pick some fruit and trade with other agents.",\n "action": "goto",\n "action_input": {"location": "market", "speed": 1}}```', additional_kwargs={}, response_metadata={})]}
+[{'action': 'goto', 'action_input': {'location': 'market', 'speed': 1}}]
+Finished in 4.4067s
+
+{'actions': [AgentAction(tool='talk', tool_input={'agent_name': 'George', 'message': "I'd like to know the current status of the market and the forest."}, log='```json\n{"thought": "The market location is currently closed and there are no agents there. The forest location is a place where fruit can be picked and used for trade. I am currently located outside, with a distance of 11.313708498984761 units from the market and 25.45584412271571 units from the forest.",\n "action": "talk",\n "action_input": {\n   "agent_name": "George",\n   "message": "I\'d like to know the current status of the market and the forest."\n }\n}```')], 'messages': [AIMessage(content='```json\n{"thought": "The market location is currently closed and there are no agents there. The forest location is a place where fruit can be picked and used for trade. I am currently located outside, with a distance of 11.313708498984761 units from the market and 25.45584412271571 units from the forest.",\n "action": "talk",\n "action_input": {\n   "agent_name": "George",\n   "message": "I\'d like to know the current status of the market and the forest."\n }\n}```', additional_kwargs={}, response_metadata={})]}
+[{'action': 'talk', 'action_input': {'agent_name': 'George', 'message': "I'd like to know the current status of the market and the forest."}}]
+Finished in 8.2450s
+
+{'actions': [AgentAction(tool='talk', tool_input={'agent_name': 'George', 'message': "Let's go to the forest and collect some apples to trade with other agents at the market when it opens."}, log='```json\n{"thought": "The query provides the current location of the agent \'George\' as \'outside\'. The query also lists available locations with their names, distances, usages, and ranges. The market location is currently closed and the forest location has fruit that can be used for trade. The agent\'s health, hunger, and happiness levels are also provided. No tools or actions have been executed yet.",\n "action": "talk",\n "action_input": {\n   "agent_name": "George",\n   "message": "Let\'s go to the forest and collect some apples to trade with other agents at the market when it opens."\n }\n}```')], 'messages': [AIMessage(content='```json\n{"thought": "The query provides the current location of the agent \'George\' as \'outside\'. The query also lists available locations with their names, distances, usages, and ranges. The market location is currently closed and the forest location has fruit that can be used for trade. The agent\'s health, hunger, and happiness levels are also provided. No tools or actions have been executed yet.",\n "action": "talk",\n "action_input": {\n   "agent_name": "George",\n   "message": "Let\'s go to the forest and collect some apples to trade with other agents at the market when it opens."\n }\n}```', additional_kwargs={}, response_metadata={})]}
+[{'action': 'talk', 'action_input': {'agent_name': 'George', 'message': "Let's go to the forest and collect some apples to trade with other agents at the market when it opens."}}]
+Finished in 13.0836s
+```
+
+We test it for the sample setup 5 times, 4 of the outputs are trying to talk with itself, only a single one is reasonable `go_to market`. The average running time is ~8s.
+
+We have test to include the Qwen LLM inside of langchain, currently it cannot stop at the position we want and it's even slower. (Should we still go ahead to fix and test it?)
 
 ## Socket Communication
 
