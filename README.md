@@ -1,23 +1,8 @@
 # LLM-Backend
 
-## Usage
+## Environment Setup
 
-First, install the conda environment according to the `environment_setup.md`
-
-```bash
-export PYTHONPATH=/path/to/this/project/folder
-
-# multi-round test
-python tests/multi_step_planning.py
-
-# single-round test
-# test the planing part
-python tests/single_step_planning.py
-#test the summarization if slot filling method is used
-python tests/single_step_summarizing.py
-
-# TODO: maybe need to update also for langchain
-```
+Install the conda environment according to the `environment_setup.md`
 
 ## Prompt Engineering
 
@@ -94,6 +79,21 @@ A very basic simulate tool is build for the agent input state.
 To reuse the pretrained target objective and decrease the output token as much as possible, a slot filling method is designed to let the LLM fill in the pattern like: "take <amount> of <object>". There is a pretrained objective for this blank filling so LLM should be very familar with it. In addition, this also reduce the output, since the json call structure (characters like ", {, } and sturctural key names) consumes lots of tokens.
 
 `Qwen/Qwen2.5-14B-Instruct` and is used for testing planning. This is the most balanced conbination for now. Less powerful model will lead to a terriable planing and summaizing. More powerful model will cost more time. It uses ~32GB VRAM.
+
+Usage:
+
+```bash
+export PYTHONPATH=/path/to/this/project/folder
+
+# multi-round test
+python tests/multi_step_planning.py
+
+# single-round test
+# test the planing part
+python tests/single_step_planning.py
+#test the summarization if slot filling method is used
+python tests/single_step_summarizing.py
+```
 
 Here are a sample output. It's very reasonable and fast (average ~5s, worst ~10s, best ~3s)
 
@@ -210,6 +210,48 @@ Finished in 5.9454s
 ############################################
 ```
 
-### Langchain
+### Langchain Method
 
 TODO: Also test langchain Mistral here
+
+## Socket Communication
+
+To communication with the rendering and executing loop in Godot, a socket setup is build and used as the core loop in `main.py`.
+
+To simulate the godot part, a testing client is provided in `tests/socket_communication.py`.
+
+Usage:
+
+```bash
+export PYTHONPATH=/path/to/this/project/folder
+
+# start client
+python main.py
+
+# test with testing client
+python tests/socket_communication.py
+```
+
+Here is a sample output:
+
+Client side:
+
+```
+{'world': {'datetime': '15.12.2024 10am', 'locations': [{'name': 'market', 'usage': "Trade objects with other agents. But it's closed now, currently there is no agents there. Reopen time is unknown.", 'distance': 2.8284271247461903, 'range': 'can_see'}, {'name': 'forest', 'usage': 'You can pick fruit in the forest. The fruit can be used trade.', 'distance': 25.45584412271571, 'range': 'can_see'}, {'name': 'outside', 'usage': 'go to locations', 'distance': 11.313708498984761, 'range': 'inside'}]}, 'vicinity': {'objects': [], 'agents': [], 'audio': []}, 'agent': {'name': 'George', 'health': 20, 'hunger': 3, 'happiness': 5, 'location': 'outside', 'currentAction': 'None', 'actionProgress': -1, 'age': 23, 'hands': [{'name': 'money', 'amount': 10}], 'inventory': [], 'ownership': []}, 'contracts': [], 'system': [], 'actions': [{'name': 'go_to', 'available': True}, {'name': 'talk', 'available': True}, {'name': 'take', 'available': True}, {'name': 'drop', 'available': True}, {'name': 'enter', 'available': True}, {'name': 'exit', 'available': True}, {'name': 'play', 'available': False}]}
+Server response: [{'name': 'go_to', 'arguments': {'location': 'forest'}}]
+```
+
+Server side:
+
+```
+Server listening on localhost:33455
+Connected to client at ('127.0.0.1', 37508)
+Received: {'world': {'datetime': '15.12.2024 10am', 'locations': [{'name': 'market', 'usage': "Trade objects with other agents. But it's closed now, currently there is no agents there. Reopen time is unknown.", 'distance': 2.8284271247461903, 'range': 'can_see'}, {'name': 'forest', 'usage': 'You can pick fruit in the forest. The fruit can be used trade.', 'distance': 25.45584412271571, 'range': 'can_see'}, {'name': 'outside', 'usage': 'go to locations', 'distance': 11.313708498984761, 'range': 'inside'}]}, 'vicinity': {'objects': [], 'agents': [], 'audio': []}, 'agent': {'name': 'George', 'health': 20, 'hunger': 3, 'happiness': 5, 'location': 'outside', 'currentAction': 'None', 'actionProgress': -1, 'age': 23, 'hands': [{'name': 'money', 'amount': 10}], 'inventory': [], 'ownership': []}, 'contracts': [], 'system': [], 'actions': [{'name': 'go_to', 'available': True}, {'name': 'talk', 'available': True}, {'name': 'take', 'available': True}, {'name': 'drop', 'available': True}, {'name': 'enter', 'available': True}, {'name': 'exit', 'available': True}, {'name': 'play', 'available': False}]}
+I am currently outside and my goal is to get more money. To achieve this, I should head to the forest to gather fruits which I can later trade for money. My current location does not provide any resources or opportunities to earn money.
+
+Action: go_to forest
+Finished in 6.8158s
+Send: [{"name": "go_to", "arguments": {"location": "forest"}}]
+
+Client disconnected
+```
