@@ -76,7 +76,7 @@ A very basic simulate tool is build for the agent input state.
 
 ### Slot Filling Method
 
-To reuse the pretrained target objective and decrease the output token as much as possible, a slot filling method is designed to let the LLM fill in the pattern like: "take <amount> of <object>". There is a pretrained objective for this blank filling so LLM should be very familar with it. In addition, this also reduce the output, since the json call structure (characters like ", {, } and sturctural key names) consumes lots of tokens.
+To reuse the pretrained target objective and decrease the output token as much as possible, a slot filling method is designed to let the LLM fill in the pattern like: "take \<amount\> of \<object\>". There is a pretrained objective for this blank filling so LLM should be very familar with it. In addition, this also reduce the output, since the json call structure (characters like ", {, } and sturctural key names) consumes lots of tokens.
 
 `Qwen/Qwen2.5-14B-Instruct` and is used for testing planning. This is the most balanced conbination for now. Less powerful model will lead to a terriable planing and summaizing. More powerful model will cost more time. It uses ~32GB VRAM.
 
@@ -91,7 +91,7 @@ python tests/multi_step_planning.py
 # single-round test
 # test the planing part
 python tests/single_step_planning.py
-#test the summarization if slot filling method is used
+# test the summarization if slot filling method is used
 python tests/single_step_summarizing.py
 ```
 
@@ -133,7 +133,7 @@ Finished in 6.0410s
 ############################################
 ```
 
-Some quantization of `Qwen/Qwen2.5-14B-Instruct` is also tested. `Qwen/Qwen2.5-14B-Instruct-AWQ` is a very good one, but it slightly faster than the original model but takes only ~12GB VRAM!
+Some quantization of `Qwen/Qwen2.5-14B-Instruct` is also tested. `Qwen/Qwen2.5-14B-Instruct-AWQ` is a very good one, because it slightly faster than the original model but takes only ~12GB VRAM!
 
 ```
 ############################################
@@ -226,10 +226,10 @@ Usage:
 export PYTHONPATH=/path/to/this/project/folder
 
 # start client
-python main.py
+python main.py --host localhost --port 33455
 
 # test with testing client
-python tests/socket_communication.py
+python tests/socket_communication.py --host localhost --port 33455
 ```
 
 Here is a sample output:
