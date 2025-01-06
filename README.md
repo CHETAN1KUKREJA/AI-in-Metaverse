@@ -251,7 +251,7 @@ Usage:
 ```bash
 export PYTHONPATH=/path/to/this/project/folder
 
-# start client
+# start server
 python main.py --host localhost --port 33455
 
 # test with testing client
