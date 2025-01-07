@@ -210,6 +210,47 @@ Finished in 6.1117s
 ############################################
 ```
 
+#### Update: Multi-step planning
+
+In the meeting with Puxuan, I found that the godot team expect a list of actions instead of a single one. So I also tried on that. Here are some of the result: 
+
+Result 1: The LLM planed in a very long period, but is hallucinating because it doesn't know the things in the future, such as the "take 5 of fruit".
+
+```
+############################################
+Currently, I am located outside with 10 units of money. My goal is to acquire more money. To achieve this, I could potentially gather fruits from the forest and then trade them at the market once it reopens. However, since the market is closed and there are no other agents or objects nearby, my immediate action should be to head towards the forest to collect fruits.
+
+Action: go_to forest, enter forest, take 5 of fruit, exit, go_to market
+[[{'name': 'go_to', 'arguments': {'location': 'forest'}}, {'name': 'enter', 'arguments': {'location': 'forest'}}, {'name': 'take', 'arguments': {'amount': '5', 'objectName': 'fruit'}}, {'name': 'exit', 'arguments': {}}, {'name': 'go_to', 'arguments': {'location': 'market'}}]]
+############################################
+```
+
+Result 2: The problem is result 1 appears again: "take 10 fruit". It has additionally logical mistake, such as: "Action: go_to market, enter forest".
+
+```
+############################################
+I am currently outside and my goal is to get more money. To achieve this, I should first head to the forest to gather fruits which can potentially be traded for money later on at the market. Since the market is closed, going to the forest makes sense.
+
+Action: go_to forest, enter forest, take 10 fruit, exit, go_to market, enter market
+[[{'name': 'go_to', 'arguments': {'location': 'forest'}}, {'name': 'enter', 'arguments': {'location': 'forest'}}]]
+Finished in 6.0420s
+############################################
+I am currently in the forest and I have 5 apples nearby. Since I don't have any apples in my inventory yet, I should take some apples. After that, I can consider exiting the forest to find another location where I might be able to trade or earn more money.
+
+Action: take 2 of apple, exit
+[[{'name': 'take', 'arguments': {'amount': '2', 'objectName': 'apple'}}, {'name': 'exit', 'arguments': {}}]]
+Finished in 5.1394s
+############################################
+I have already picked apples from the forest and am now back outside. Since I have apples and money, I could consider going to the market once it reopens to see if I can trade or buy more items. However, since the market is closed, I should look for another opportunity to increase my resources or explore further.
+
+Action: go_to market, enter forest
+[[{'name': 'go_to', 'arguments': {'location': 'market'}}, {'name': 'enter', 'arguments': {'location': 'forest'}}]]
+Finished in 5.5919s
+############################################
+```
+
+As summary, multi-step planning is taking more time for planning additional steps as well as sacrificing some performance (intelligence), since the confident interval decrease exponentially. Also, if the state of an agent changes during executing and LLM need to re-plan, the rest of the commands is wasted as well as the time for planning them. I would recommand to use the single step planning. Noe the single step planning returns a list of a single call. This should fulfills the requirement of the godot team.
+
 ### Langchain Method
 
 We also tried Langchain framework with inner LLM `Mistral-7B-Instruct`. It is not as intelligent as the above `Qwen2.5-14B-Instruct`, so it's halllucinating most of the time. Also it's even slower than `Qwen2.5-14B-Instruct`. Here is some sample outputs:

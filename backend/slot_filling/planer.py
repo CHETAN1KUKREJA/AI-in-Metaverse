@@ -1,12 +1,12 @@
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM, BitsAndBytesConfig
-from input_processing import get_processed
+from input_processing.prompt_slot_filling import get_prompt
 import regex
 import json
 
 
 class Planer:
-    def __init__(self, model_path: str, cache_dir="cached_models"):
+    def __init__(self, model_path: str, cache_dir="cached_models", multi_step=False):
         self.tokenizer = AutoTokenizer.from_pretrained(model_path, cache_dir=cache_dir)
 
         self.model = AutoModelForCausalLM.from_pretrained(
@@ -16,11 +16,13 @@ class Planer:
             torch_dtype="auto",
             attn_implementation="flash_attention_2"
         )
+        
+        self.multi_step = multi_step
 
     def preprocess(self, input_jsons, performed_actions):
         prompt_batch = []
         for input_json in input_jsons:
-            prompt, action_tools = get_processed(input_json)
+            prompt = get_prompt(input_json, multi_step=self.multi_step)
 
             if len(performed_actions) > 0:
                 prompt += "\n\nHere are your performed actions in previos steps:\n"
@@ -71,7 +73,7 @@ class Planer:
             action_batch.append(action)
         return action_batch
 
-    def iterate_step(self, input_jsons, performed_actions):
+    def iterate_step(self, input_jsons, performed_actions=[]):
         prompt_batch = self.preprocess(input_jsons, performed_actions)
         response_batch = self.generate_step(prompt_batch)
         action_batch = self.postprocess(response_batch)

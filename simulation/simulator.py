@@ -48,34 +48,35 @@ class Simulator:
 
         return agent_input
 
-    def update_state(self, action):
+    def update_state(self, actions):
         target_agent = self.agent
-        match action["name"]:
-            case "go_to":
-                assert target_agent.location == self.outside
+        for action in actions:
+            match action["name"]:
+                case "go_to":
+                    assert target_agent.location == self.outside
 
-                assert "arguments" in action
-                assert "location" in action["arguments"]
-                assert action["arguments"]["location"] in self.world.locations.keys()
+                    assert "arguments" in action
+                    assert "location" in action["arguments"]
+                    assert action["arguments"]["location"] in self.world.locations.keys()
 
-                target_agent.pos = self.world.locations[action["arguments"]["location"]].pos
-            case "talk":
-                pass
-            case "take":
-                name = action["arguments"]["objectName"]
-                target_agent.inventory[name] = target_agent.location.objects[name]
-                target_agent.location.objects.pop(name)
-            case "drop":
-                pass
-            case "enter":
-                assert target_agent.location == self.outside
+                    target_agent.pos = self.world.locations[action["arguments"]["location"]].pos
+                case "talk":
+                    pass
+                case "take":
+                    name = action["arguments"]["objectName"]
+                    target_agent.inventory[name] = target_agent.location.objects[name]
+                    target_agent.location.objects.pop(name)
+                case "drop":
+                    pass
+                case "enter":
+                    assert target_agent.location == self.outside
 
-                assert "arguments" in action
-                assert "location" in action["arguments"]
-                assert action["arguments"]["location"] in self.world.locations.keys()
+                    assert "arguments" in action
+                    assert "location" in action["arguments"]
+                    assert action["arguments"]["location"] in self.world.locations.keys()
 
-                target_agent.location = self.world.locations[action["arguments"]["location"]]
-            case "exit":
-                target_agent.location = self.world.locations["outside"]
-            case "play":
-                pass
+                    target_agent.location = self.world.locations[action["arguments"]["location"]]
+                case "exit":
+                    target_agent.location = self.world.locations["outside"]
+                case "play":
+                    pass

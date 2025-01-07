@@ -67,39 +67,52 @@ class LLMSummarizer:
 
 
 class PatternSummarizer:
+    
     def parse_action(self, text):
+        text = text.replace("Action: ", "")
+        actions = [t.strip() for t in text.split(",")]
+        
         patterns = {
             "go_to": {
-                "pattern": r"Action: go_to\s+(\w+)",
+                "pattern": r"go_to\s+(\w+)",
                 "fields": ["location"],
             },
             "enter": {
-                "pattern": r"Action: enter\s+(\w+)",
+                "pattern": r"enter\s+(\w+)",
                 "fields": ["location"],
             },
             "take": {
-                "pattern": r"Action: take\s+(\d+)\s+of\s+(\w+)",
+                "pattern": r"take\s+(\d+)\s+of\s+(\w+)",
                 "fields": ["amount", "objectName"],
             },
             "drop": {
-                "pattern": r"Action: drop\s+(\d+)\s+of\s+(\w+)",
+                "pattern": r"drop\s+(\d+)\s+of\s+(\w+)",
                 "fields": ["amount", "objectName"],
             },
             "exit": {
-                "pattern": r"Action: exit",
+                "pattern": r"exit",
                 "fields": [],
             },
         }
 
-        for action_type, config in patterns.items():
-            match = re.search(config["pattern"], text)
-            if match:
-                result = {"name": action_type, "arguments": {}}
-                for i, field in enumerate(config["fields"]):
-                    result["arguments"][field] = match.group(i + 1)
-                return result
+        output = []
 
-        return None
+        for action in actions:
+            for action_type, config in patterns.items():
+                match = re.search(config["pattern"], action)
+                result = None
+                if match:
+                    result = {"name": action_type, "arguments": {}}
+                    for i, field in enumerate(config["fields"]):
+                        result["arguments"][field] = match.group(i + 1)
+                    break
+                
+            if result:
+                output.append(result)
+            else:
+                return output
+
+        return output
 
     def iterate_step(self, inputs):
         call_batch = []
