@@ -13,7 +13,7 @@ def parse_args():
         action="store_true",
         help="Enable profiling or not.",
     )
-    parse.add_argument("--host", type=str, default="localhost", help="Host name of the server")
+    parse.add_argument("--host", type=str, default="", help="Host name of the server")
     parse.add_argument("--port", type=int, default=33455, help="Port of the server")
     args = parse.parse_args()
     return args
