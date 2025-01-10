@@ -49,6 +49,6 @@ class SocketClient():
                 self.socket.sendall(response_json.encode('utf-8'))
                 
             except Exception as e:
-                print(f"Error: {e}")
+                print(f"Error: {e.with_traceback()}")
                 break
         

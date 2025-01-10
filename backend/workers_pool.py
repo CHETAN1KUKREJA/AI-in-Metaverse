@@ -16,7 +16,7 @@ class WorkersPool():
     def __init__(self, num_workers = 1):
         self.workers = []
         for i in range(num_workers):
-            self.workers.append(WorkerAgent(self, i))
+            self.workers.append(WorkerAgent(i))
         self.empty_sem = threading.Semaphore(num_workers)    
         
     def process(self, request, memory):

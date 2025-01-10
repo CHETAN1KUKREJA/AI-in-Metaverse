@@ -29,5 +29,5 @@ if __name__ == "__main__":
     workers_pool = WorkersPool(num_workers=1)
 
     # start_server(process, args.host, args.port)
-    sv = SocketServer(workers_pool, None, args.port)
+    sv = SocketServer(workers_pool, port=args.port)
     sv.start_listening()
