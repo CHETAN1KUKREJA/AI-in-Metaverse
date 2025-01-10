@@ -14,7 +14,8 @@ def get_prompt(input_json, multi_step=False):
 
     function_str_single = r"""
 You can perform one of the following action:
-1. go_to <location>: you can go to the nearby of a location. The location can be an item name in order to go to the nearby of that item.
+You can choose within following action patterns:
+1. go_to <location>: you can go to the nearby of a location. The location can be an object name in order to go to the nearby of that object
 2. take <amount> of <object>: you can pick some amount of objects if it exist in the vicinity
 3. drop <amount> of <object>: you can drop some amount of objects from you
 4. talk to <agent> with \"<content>\": you can talk to an nearby agent with the content. Content should be as daily talk. The agent must exist.
@@ -22,7 +23,7 @@ You can perform one of the following action:
 
     function_str_multi = r"""
 You can choose within following action patterns:
-1. go_to <location>: you can go to the nearby of a location. The location can be an item name in order to go to the nearby of that item.
+1. go_to <location>: you can go to the nearby of a location. The location can be an object name in order to go to the nearby of that object
 2. take <amount> of <object>: you can pick some amount of objects if it exist in the vicinity
 3. drop <amount> of <object>: you can drop some amount of objects from you
 4. talk to <agent> with \"<content>\": you can talk to an nearby agent with the content. Content should be as daily talk. The agent must exist.
