@@ -1,0 +1,491 @@
+TASK LIST
+
+---
+
+### **1. Environment Setup**
+- [ SKIPPED FOR NOW ] **Set Up Godot**: Ensure your Godot environment is ready and configured to send data (options, descriptions, time, interactions) to the LLM.
+- [ SKIPPED FOR NOW ] **Set Up LLaMA 3.1**: Install and configure LLaMA 3.1 (8B) using one of the following:
+  - **Choices**:
+    - `llama-cpp-python`: Lightweight, great for running LLaMA on various devices (CPU/GPU).
+    - Hugging Face Transformers: Offers broader integration options and pre-trained model management.
+    - Recommendation: Start with `llama-cpp-python` for simplicity, move to Hugging Face if you need extended features like fine-tuning pipelines.
+  
+- [ DONE ] **Integrate Frameworks**: Install and configure key libraries:
+  - **Choices**:
+    - **LangChain**: Best for managing prompts, chains, and workflows.
+    - **DSPy**: Useful for declarative agent workflows.
+    - Recommendation: Use **LangChain** for the initial prompt management and workflows, as it’s more widely adopted and versatile.
+
+- [ DONE ] **Vector Database for Memory**:
+  - **Choices**:
+    - **Chroma**: Lightweight and easy to set up for small-scale memory systems.
+    - **Weaviate**: More advanced, supports semantic search and additional integrations.
+    - **Pinecone**: Highly scalable, ideal for large-scale memory and retrieval tasks.
+    - Recommendation: Start with **Chroma** for simplicity. Switch to Pinecone if scaling is needed.
+
+- [ LATER ] **Create a GitHub Repo**: Set up version control and organize your project files.
+
+---
+
+### **2. LLM Agent Core Functionality**
+- [ ] **Create Input/Output Pipeline**: Develop a pipeline for Godot to send data to the LLM and receive responses.
+- [ ] **Decision-Making Logic**:
+  - Implement prompt templates using:
+    - **Choices**:
+      - LangChain (better for structured workflows).
+      - DSPy (if you prefer a data-centric, declarative approach).
+      - Recommendation: Use **LangChain**, as it provides prompt chains and integrates well with Godot.
+- [ ] **Reasoning Framework**:
+  - Use LangChain or DSPy tools to design reasoning logic where agents explain decisions.
+
+---
+
+### **3. Memory System Implementation**
+- [ ] **Short-Term Memory**:
+  - **Choices**:
+    - **Chroma**: Store and query embeddings for ephemeral data.
+    - **Weaviate**: Semantic search but more complex to configure.
+    - Recommendation: Use **Chroma** for lightweight short-term memory.
+- [ ] **Long-Term Memory**:
+  - **Choices**:
+    - Chroma, Weaviate, or Pinecone.
+    - Recommendation: Use **Pinecone** for persistent, scalable memory.
+- [ ] **Memory Forgetfulness**:
+  - Implement a time-decay mechanism using:
+    - LangChain utilities or custom logic in Python.
+
+---
+
+### **4. Personality and Behavior Development**
+- [ ] **Define Agent Personalities**:
+  - Use LangChain’s `PromptTemplate` or DSPy to store personality attributes.
+- [ ] **Develop Cross-Agent Interactions**:
+  - Define a framework for interaction:
+    - **Choices**:
+      - LangChain conversational chains.
+      - Hugging Face Transformers for dialogue generation.
+      - Recommendation: Use LangChain with conversational chains.
+- [ ] **Implement Emotional States**:
+  - Simulate emotions using embeddings or LangChain’s memory features.
+
+---
+
+### **5. Complex Decision Dynamics**
+- [ ] **Edge-of-Choice Scenarios**:
+  - Use reinforcement learning or pre-defined rules.
+  - **Choices**:
+    - OpenAI Gym (for RL-like dynamics).
+    - LangChain (to prompt reasoning for difficult choices).
+    - Recommendation: Start with LangChain for simpler reasoning, move to OpenAI Gym for advanced learning.
+- [ ] **Feedback Mechanism**:
+  - Implement reinforcement-like feedback:
+    - LangChain or DSPy for structured feedback collection.
+    - Recommendation: Use LangChain initially for ease of integration.
+- [ ] **Hierarchy of Goals**:
+  - Implement subgoal tracking using LangChain’s memory and chains.
+
+---
+
+### **6. Temporal Awareness**
+- [ ] **Integrate Time Awareness**:
+  - Use LangChain or custom Python utilities to design temporal reasoning into prompts.
+
+---
+
+### **7. Agent Reflection and Iteration**
+- [ ] **Inner Voice Mechanism**:
+  - Use DSPy or LangChain’s conversation chains for self-reflection.
+- [ ] **Small Talk & Function Calling**:
+  - Design dual-mode functionality using:
+    - LangChain for structured workflows.
+    - DSPy for declarative interactions.
+    - Recommendation: LangChain for flexibility.
+- [ ] **Triggered Thinking**:
+  - Implement modes where agents either:
+    - Always think actively.
+    - Only think when asked but provide complete reasoning.
+
+---
+
+### **8. Evaluation and Testing**
+- [ ] **Test LLM Models**:
+  - **Choices**:
+    - LLaMA 3.1 via llama-cpp-python.
+    - Hugging Face Transformers (if you need alternate models).
+    - Recommendation: Start with LLaMA 3.1 for your current setup.
+- [ ] **Agent Simulations**:
+  - Use Godot for environment simulations and LangChain for agent reasoning.
+- [ ] **Measure Success**:
+  - Define metrics for decision accuracy, reasoning clarity, and memory retrieval.
+
+---
+
+### **9. Fine-Tuning and Optimization**
+- [ ] **Fine-Tune LLaMA 3.1**:
+  - **Choices**:
+    - Hugging Face Transformers.
+    - Low-Rank Adaptation (LoRA) for efficient fine-tuning.
+    - Recommendation: Use LoRA for resource-efficient fine-tuning.
+- [ ] **Optimize Performance**:
+  - Use Hugging Face Optimum or Ray for inference optimization.
+- [ ] **Explore Alternative Models**:
+  - Test Sentence-BERT, T5, or GPT-NeoX for specialized tasks.
+
+---
+
+### **10. User Interface and Deployment**
+- [ ] **Develop Debugging UI**:
+  - **Choices**:
+    - Gradio: Easy to set up for simple debugging interfaces.
+    - Streamlit: Ideal for building dashboards and demos.
+    - Recommendation: Use Gradio for quick UI prototyping.
+- [ ] **Deploy System**:
+  - Package using MLFlow or Cog for production-ready APIs.
+
+---
+
+### **11. Advanced Features and Future Work**
+- [ ] **Train Agents in Unknown/Partially Known Environments**:
+  - Use reinforcement learning frameworks like OpenAI Gym or Ray RLlib.
+- [ ] **Study LLM Variability**:
+  - Experiment with different LLMs to analyze behavioral variations.
+
+---
+
+
+What do I want?
+
+Iteration 1:
+----------------------			          ----------------------
+|		             |	--------------->  |                    |  
+|	    GODOT	     | 			          |      LLM Agent     |
+|		             |	<---------------  |                    |
+----------------------			          ----------------------
+
+GODOT:
+- Godot will give the LLM agent some data telling it what options are available to the agent. Along with the data, Godot will also give the LLM agent a 
+description of the options available to the agent.
+- Godot will tell the LLM agent about what it is interacting with.
+- Godot will tell the LLM agent about what can be interacted with.
+- Godot will provide time related information to the LLM agent.
+
+LLM Agent:
+- LLM Agent will take the data from Godot and will use it to make decisions.
+- LLM Agent will be able to either call functions or return a JSON object to Godot.
+- LLM Agent will be able to tell why it made a decision.
+
+
+Iteration 2:
+|    +-----------------+       +-----------------+       +----------------+
+|    |                 |       |                 |       |                |
+|    |      GODOT      |-------+    LLM Agent    |-------+   Other Agent  |
+|    |                 |   +---|                 |--+    |                |
+|    +-----------------+   |   +-----------------+  |    +----------------+
+|            |             |                        |                      
+|            |             |                        |                      
+|            |    +--------|-------+         +------|-------+              
+|            |    |                |         |              |              
+|            +----|  Quick Memory  +---------| Agent Memory |              
+|                 |                |         |              |              
+|                 +----------------+         +--------------+              
+                                                                      
+- need a Memory than can give factual information very quickly. eg. name, age, likeness score etc.
+- need a Memory that can store information for a longer period of time. eg. what happened in the last conversation, what was the decision made etc.
+- need the agent Memory to be forgetful. eg. forget the information after a certain period of time.
+- need long term vs short term memory
+- need to give the agents personality
+- need to design cross agent behavior and emotions
+- how to push the agent at the edge of 2 choices
+- how to make the agent learn from its mistakes/successes
+- agents need to know the value of time
+- heirarchy of goals and subgoals
+- need a feedback mechanism to understand impact of decisions
+- need the ability to rethink on actions (inner mind voice)
+- should be capable of both small talk and function calling behavior
+- Ideally 2 options. 1. Always in a state of thinking and 2. Only think when asked to think but forced to return a good decision
+- thinking clouds
+- thrown into an unknown/semiknown environment
+- impact of changing the LLM itself                                    
+                                                             
+Task List based on the above:
+1. Create a Memory that can give factual information very quickly. eg. name, age, likeness score etc.
+2. Create a Memory that can store information for a longer period of time. eg. what happened in the last conversation, what was the decision made etc.
+3. Create the agent Memory to be forgetful. eg. forget the information after a certain period of time.
+4. Create long term vs short term memory
+5. Give the agents personality
+6. Design cross agent behavior and emotions
+7. Provide capability to push the agent at the edge of 2 choices
+8. Make the agent learn from its mistakes/successes
+9. Agents need to know the value of time
+10. Heirarchy of goals and subgoals
+11. Feedback mechanism to understand impact of decisions
+12. Ability to rethink on actions (inner mind voice)
+13. Should be capable of both small talk and function calling behavior
+14. Ideally 2 options. 1. Always in a state of thinking and 2. Only think when asked to think but forced to return a good decision
+15. Thinking clouds
+16. Thrown into an unknown/semiknown environment
+17. Impact of changing the LLM itself
+
+
+### Tools/Libraries/Techniques:  
+
+LLM Agent and Memory:  
+- LLM Frameworks: OpenAI API, Hugging Face Transformers, LangChain.  
+- Memory Management: Pinecone, Weaviate, FAISS, ChromaDB.  
+- Forgetfulness Mechanisms: Time-decay algorithms, sliding window approaches, or custom retention policies.  
+
+Decision Making and Justification:  
+- Reinforcement Learning: RLHF (Reinforcement Learning with Human Feedback), Proximal Policy Optimization (PPO).  
+- Explainability: SHAP, LIME for decision traceability; prompt engineering for justification generation.  
+- Function Calling: OpenAI function calling, JSON serialization/deserialization libraries (e.g., Python `json` module).  
+
+Personality, Behavior, and Emotions:  
+- Behavior Design: Rule-based modeling, decision trees, or neural networks trained on behavioral data.  
+- Emotion Simulation: Plutchik’s wheel-based emotion modeling, affective computing frameworks like Affectiva or Empathic AI.  
+
+Hierarchies and Subgoals:  
+- Goal-Oriented Agents: Hierarchical Task Networks (HTNs), BDI (Belief-Desire-Intention) models.  
+- Task Prioritization: PyPlanning or custom heuristic-based systems.  
+
+Learning from Mistakes and Successes:  
+- Reinforcement Learning: Q-learning, SARSA, or deep RL methods like DDPG and SAC.  
+- Online Learning: Bandit algorithms, incremental learning.  
+
+Temporal Awareness:  
+- Time Management: Custom time-tracking modules, timestamp-based reasoning.  
+- Temporal Reasoning: Allen’s interval algebra for complex time relationships.  
+
+Small Talk and Function Calling:  
+- Dialog Systems: Rasa, Botpress, LangChain conversational agents.  
+- Hybrid Systems: Combining conversational flow with external function invocation (e.g., LangChain tools).  
+
+Agent Thinking Modes:  
+- Dual Modes: Implement finite state machines (FSM) for toggling between continuous and on-demand thinking.  
+- Meta-cognition: Use recursive calls to evaluate decisions ("inner voice").  
+
+Exploration of Unknown Environments:  
+- Exploration Algorithms: Randomized exploration, Monte Carlo Tree Search (MCTS).  
+- State Representation: Graph-based representations, embedding-based representations for unknown environments.  
+
+Cross-Agent Interactions:  
+- Multi-Agent Systems: OpenSpiel, PettingZoo, or Unity ML-Agents.  
+- Emotion and Behavior Interactions: Event-based emotion propagation, weighted interaction matrices.  
+
+Feedback Mechanisms:  
+- Reward Mechanisms: Design explicit reward functions.  
+- Evaluation Metrics: BLEU scores, success rate metrics for task completion.  
+
+"Thinking Clouds" Visualization:  
+- Visualization: Godot particle systems, external integrations with matplotlib or Plotly.  
+
+Impact of LLM Changes:  
+- Comparative Analysis: Benchmarking frameworks like EleutherAI’s lm-eval-harness.  
+- **Fine-Tuning**: LoRA (Low-Rank Adaptation), prompt-based fine-tuning for compatibility testing.  
+
+
+Here are the frameworks, techniques, and methods you should explore to use **LLaMA 3.1 8B** effectively for your project:
+
+---
+
+### **Frameworks and Libraries**:
+#### **Core LLM Integration**:
+- **Hugging Face Transformers**: For loading, running, and fine-tuning LLaMA models.
+- **LangChain**: To build pipelines for chaining prompts, memory systems, and tool interactions.
+- **LlamaIndex (formerly GPT Index)**: For connecting your LLM with external data sources and memory.
+
+#### **Memory and Context Handling**:
+- **Vector Databases**: Pinecone, Weaviate, FAISS, or ChromaDB for semantic search and memory recall.
+- **LangChain Memory Modules**: Specifically for short-term vs. long-term memory distinction.
+
+#### **Training and Fine-Tuning**:
+- **PEFT (Parameter-Efficient Fine-Tuning)**: LoRA, QLoRA for resource-efficient fine-tuning of LLaMA.
+- **Hugging Face Accelerate**: For distributed training on limited GPUs.
+- **RLHF Frameworks**: trl (by Hugging Face) for implementing reinforcement learning with human feedback.
+
+#### **Multi-Agent Systems**:
+- **PettingZoo** or **OpenSpiel**: For coordinating interactions among multiple LLMs in a shared environment.
+- **Unity ML-Agents or Godot AI Modules**: For integrating LLaMA agents with game environments.
+
+---
+
+### **Prompt Engineering Techniques**:
+#### **Dynamic Prompt Templates**:
+- Use frameworks like **LangChain PromptTemplates** to create reusable, parameterized prompts.
+- Examples:
+  - Role-based prompting: *"You are an AI assistant in a virtual game environment. Your goal is to make decisions that maximize cooperation."*
+  - Few-shot examples: Include task examples within the prompt to guide behavior.
+
+#### **Chain-of-Thought (CoT)**:
+- Ask the model to reason step-by-step before reaching a conclusion.
+  - Example: *"Consider the following options step by step, evaluate each, and explain your reasoning."*
+
+#### **Self-Reflection Prompts**:
+- Encourage the model to evaluate its own decisions:
+  - *"Why did you choose this option? How will this impact the environment?"*
+
+#### **Conditional Prompts**:
+- Use conditional structures to help the LLM handle ambiguous situations:
+  - *"If option A seems viable, explain why. If not, choose the next best alternative and justify your choice."*
+
+#### **Function Calling Prompts**:
+- Format outputs to trigger specific actions in Godot.
+  - Example: *"Respond in JSON format with {action: 'interact', object: 'door'} or {action: 'think', reason: 'uncertain which path to take'}."*
+
+---
+
+### **Training and Fine-Tuning Techniques**:
+#### **Parameter-Efficient Fine-Tuning**:
+1. **LoRA (Low-Rank Adaptation)**:
+   - Add lightweight adapters for task-specific fine-tuning without retraining the entire model.
+   - Use for adapting the LLM to Godot-specific data.
+2. **QLoRA**:
+   - Optimized for 4-bit quantization, ideal for larger models on limited hardware.
+
+#### **Instruction Tuning**:
+- Fine-tune the LLM on task-specific instructions using a dataset of interactions, e.g., **Supervised Fine-Tuning (SFT)**:
+  - Create custom datasets with scenarios the LLM might encounter in the Godot environment.
+  - Dataset example:
+    - **Input**: "You see a locked door and a window. What will you do?"
+    - **Output**: "Attempt to open the window."
+
+#### **Reinforcement Learning**:
+1. **RLHF (Reinforcement Learning with Human Feedback)**:
+   - Train the LLM to align decisions with human preferences using feedback loops.
+2. **Simulated Feedback**:
+   - Use Godot to simulate environments where LLMs receive rewards for specific behaviors (e.g., achieving subgoals).
+
+#### **Unsupervised Fine-Tuning**:
+- Use Godot-generated transcripts to adapt the LLM for better contextual understanding:
+  - Example: Train on dialogues, interactions, and options provided by Godot to increase environment familiarity.
+
+#### **Task-Specific Fine-Tuning**:
+- Use Hugging Face’s **`Trainer`** API for fine-tuning LLaMA models with game-specific datasets.
+- Train the LLM to recognize key terms, commands, or hierarchies from Godot.
+
+---
+
+### **Memory Integration Techniques**:
+#### **Short-Term Memory**:
+- Use a sliding window approach to keep the most recent interactions in the context window.
+- Frameworks: **LangChain ConversationBufferWindowMemory**.
+
+#### **Long-Term Memory**:
+- Store information in vector databases (e.g., Pinecone).
+- Retrieve relevant memories using semantic search and append them to the prompt.
+
+#### **Forgetfulness Mechanisms**:
+- Implement time-based decay functions to remove irrelevant data periodically.
+
+---
+
+### **Agent Behavior and Decision-Making**:
+#### **Personality and Emotion Simulation**:
+- Add behavioral traits as parameters in prompts or fine-tuning data.
+  - Example: *"You are a curious and cautious agent. Make decisions based on these traits."*
+
+#### **Multi-Agent Interaction**:
+- Use reinforcement learning to simulate cooperative or competitive behaviors.
+- Employ event-driven interaction models, where agents react to specific game events.
+
+#### **Hierarchical Goal Management**:
+- Use tools like **LangChain Chains** or tree-like data structures to handle goals and subgoals.
+- Framework: **PyPlanning** for hierarchical task planning.
+
+#### **Time Awareness**:
+- Add a time-tracking mechanism and represent temporal constraints in prompts.
+  - Example: *"It is 3 PM. You have 2 hours to complete this task."*
+
+---
+
+### **Feedback and Self-Correction**:
+- Use **Inner Monologue Prompts**:
+  - *"Reevaluate your decision: Could you have chosen a better option? Why or why not?"*
+- Build reward functions in Godot to train the LLM through trial and error.
+
+---
+
+
+Here’s a breakdown of tools and libraries from your list (excluding those already mentioned) that are **good for your use case** and compatible with each other:
+
+---
+
+### **Highly Relevant Tools/Libraries**:
+1. **DSPy**:  
+   - **Why use it?** It integrates LLMs into workflows for data processing and reasoning, which aligns with your needs for decision-making and justification in the environment.  
+
+2. **Haystack**:  
+   - **Why use it?** For retrieval-augmented generation (RAG) setups, combining LLMs with external knowledge. This is especially useful for memory systems (e.g., long-term memory and forgetfulness).
+
+3. **Chroma**:  
+   - **Why use it?** A lightweight and efficient vector database for embedding storage and retrieval. Useful for implementing memory and context storage.
+
+4. **SentenceTransformers**:  
+   - **Why use it?** To generate high-quality embeddings for semantic search, memory recall, or personality/context storage.
+
+5. **Weaviate**:  
+   - **Why use it?** For advanced semantic search and managing long-term memory with hierarchical data.
+
+6. **DeepLake**:  
+   - **Why use it?** For managing multimodal datasets and storing embeddings. Could complement Chroma or Weaviate.
+
+7. **Ray**:  
+   - **Why use it?** For scaling LLM-related tasks like training, inference, or simulation of multi-agent systems in a distributed setting.
+
+8. **Gradio**:  
+   - **Why use it?** For creating user-friendly interfaces to debug and visualize agent behavior or interactions with Godot.
+
+9. **Optimum (by Hugging Face)**:  
+   - **Why use it?** To optimize LLaMA 3.1 performance on limited GPU hardware. Useful for inference and deployment.
+
+10. **MLFlow**:  
+   - **Why use it?** For experiment tracking and managing different iterations of your LLM-based agents or memories.
+
+---
+
+### **Useful for Specific Scenarios**:
+1. **Rasa**:  
+   - **Why use it?** For building dialogue models to handle agent communication or small talk tasks.
+
+2. **Streamlit**:  
+   - **Why use it?** For creating interactive dashboards to monitor agent performance, memory, and decisions.
+
+3. **TensorFlow Extended (TFX)**:  
+   - **Why use it?** If you need a robust production pipeline to manage LLM-based workflows.
+
+4. **Sentence-BERT**:  
+   - **Why use it?** For clustering or analyzing patterns in agent interactions or conversations.
+
+5. **Cog**:  
+   - **Why use it?** For converting LLM models into production-ready APIs to interact with Godot.
+
+6. **Pinecone**:  
+   - **Why use it?** As an alternative to Chroma or Weaviate for memory storage. It’s scalable and widely used in RAG setups.
+
+7. **TGI (Text Generation Inference)**:  
+   - **Why use it?** For efficient inference of large models like LLaMA in production.
+
+---
+
+### **Good for Experiments and Compatibility**:
+1. **OpenAI Gym**:  
+   - **Why use it?** For testing reinforcement learning (RL) approaches, which can complement agent decision-making and learning.
+
+2. **Fritz AI**:  
+   - **Why use it?** If you need automated tools for managing model updates or deployment workflows.
+
+3. **EleutherAI GPT-NeoX**:  
+   - **Why use it?** As an open-source alternative to LLaMA for experimenting with multi-agent setups.
+
+4. **T5**:  
+   - **Why use it?** For text-to-text tasks like small talk or explanations in conversational agents.
+
+---
+
+
+LLM classification 
+LLM Instruction Finetuning 
+LLM Preference Finetuning
+COT Prompting
+RAG
+litGPT
+Redis

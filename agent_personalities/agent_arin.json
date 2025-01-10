@@ -1,0 +1,15 @@
+{
+    "documents": [
+        "Name: Arin, Age: 29, Role: Mage",
+        "Rule: Magic spells require mana and precise incantations",
+        "Environment: The library is filled with ancient tomes and glowing orbs of light",
+        "Rule: Mages are forbidden from using dark magic unless sanctioned by the council"
+    ],
+    "metadatas": [
+        {"type": "character_info"},
+        {"type": "rule"},
+        {"type": "environment"},
+        {"type": "rule"}
+    ],
+    "ids": ["char_2", "rule_3", "env_2", "rule_4"]
+}
