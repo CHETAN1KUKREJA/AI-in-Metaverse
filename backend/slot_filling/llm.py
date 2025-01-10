@@ -36,4 +36,4 @@ class LLM:
         return call_batch
     
     def process(self, json, memory):
-        return self.iterate_step(json)
+        return self.iterate_step([json])

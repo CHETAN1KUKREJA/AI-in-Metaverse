@@ -23,10 +23,10 @@ def parse_args():
 if __name__ == "__main__":
     args = parse_args()
 
-    llm = SlotFillingLLM()
+    # llm = SlotFillingLLM()
     # llm = LangchainLLM()
 
-    workers_pool = WorkersPool(num_workers=1)
+    workers_pool = WorkersPool(num_workers=2)
 
     # start_server(process, args.host, args.port)
     sv = SocketServer(workers_pool, port=args.port)

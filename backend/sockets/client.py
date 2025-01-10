@@ -35,8 +35,10 @@ class SocketClient():
         
         while self.is_running:
             try:
-                request_json = self._read_until_json()
-                print(f"Received request from address: {self.address}, request:\n {request_json}")
+                request_str = self._read_until_json()
+                print(f"Received request from address: {self.address}")
+                
+                request_json = json.loads(request_str)
                 
                 before_process = time.time()
                 call_batch = self.workers_pool.process(request_json, self.memory)

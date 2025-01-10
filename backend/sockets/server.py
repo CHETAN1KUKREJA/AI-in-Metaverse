@@ -36,7 +36,7 @@ class SocketServer():
         
         self.server_socket.listen(connection_number)
         try:
-            while self.is_listening:
+            while True:
                 (client_socket, client_address) = self.server_socket.accept()
                 client = SocketClient(self.workers_pool, client_socket, client_address)
            
