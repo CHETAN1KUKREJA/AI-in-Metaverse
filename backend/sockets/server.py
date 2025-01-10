@@ -1,6 +1,5 @@
 import socket
 from threading import Thread
-import sys
 from backend.sockets.client import SocketClient
 
 class SocketServer():
@@ -9,29 +8,10 @@ class SocketServer():
         self.host = host
         self.port = port
         self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.server_socket.bind((self.host, self.port))
         self.server_socket.listen(socket.SOMAXCONN)
         self.client_threads = []
-        self.is_listening = True
-        
-    def stop_server(self):
-        """
-        Stops the server from listening for new connections.
-        Behavior:
-            - Closes the server socket.
-            - Sets the is_listening flag to False.
-            - Joins all client threads.
-        """
-        print("Server is stopping")
-        
-        self.is_listening = False
-        
-        for thread in self.client_threads:
-            thread.kill()   
-        
-        self.server_socket.close()
-        for client in self.clients:
-            client.stop_reading()
         
     
     def start_listening(self, connection_number = socket.SOMAXCONN):

@@ -18,6 +18,7 @@ You can perform one of the following action:
 2. take <amount> of <object>: you can pick some amount of objects if it exist in the vicinity
 3. drop <amount> of <object>: you can drop some amount of objects from you
 4. talk to <agent> with \"<content>\": you can talk to an nearby agent with the content. Content should be as daily talk. The agent must exist.
+5. buy <amount> of <object>: 
 """.strip()
 
     function_str_multi = r"""
