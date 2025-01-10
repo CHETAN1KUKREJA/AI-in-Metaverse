@@ -77,10 +77,6 @@ class PatternSummarizer:
                 "pattern": r"go_to\s+(\w+)",
                 "fields": ["location"],
             },
-            "enter": {
-                "pattern": r"enter\s+(\w+)",
-                "fields": ["location"],
-            },
             "take": {
                 "pattern": r"take\s+(\d+)\s+of\s+(\w+)",
                 "fields": ["amount", "objectName"],
@@ -89,10 +85,16 @@ class PatternSummarizer:
                 "pattern": r"drop\s+(\d+)\s+of\s+(\w+)",
                 "fields": ["amount", "objectName"],
             },
-            "exit": {
-                "pattern": r"exit",
-                "fields": [],
+            "talk1": {
+                "name": "talk",
+                "pattern": r"talk\s+to\s+(\w+)\s+with\s+\"(\w+)\"",
+                "fields": ["agentName", "content"]
             },
+            "talk2": {
+                "name": "talk",
+                "pattern": r"talk\s+to\s+(\w+)\s+with\s+\'(\w+)\'",
+                "fields": ["agentName", "content"]
+            }
         }
 
         output = []
@@ -102,7 +104,8 @@ class PatternSummarizer:
                 match = re.search(config["pattern"], action)
                 result = None
                 if match:
-                    result = {"name": action_type, "arguments": {}}
+                    action_name = config["name"] if "name" in config else action_type
+                    result = {"name": action_name, "arguments": {}}
                     for i, field in enumerate(config["fields"]):
                         result["arguments"][field] = match.group(i + 1)
                     break

@@ -77,6 +77,5 @@ class Planer:
         prompt_batch = self.preprocess(input_jsons, performed_actions)
         response_batch = self.generate_step(prompt_batch)
         action_batch = self.postprocess(response_batch)
-        # print(prompt_batch[0])
         print(response_batch[0])
         return action_batch

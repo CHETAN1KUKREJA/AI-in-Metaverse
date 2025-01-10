@@ -19,16 +19,13 @@ class LLM:
         for call in calls:
             match call["name"]:
                 case "go_to":
-                    # mem = f"You go to {call['arguments']['location']}, the reason is: {call['arguments']['explanation_for_this_action_and_arguments']}"
                     mem = f"You go to {call['arguments']['location']}. Now you are near to it, but still not in it."
-                case "enter":
-                    mem = f"You enter {call['arguments']['location']}."
                 case "talk":
                     mem = f"You try to talk with \"{call['arguments']['other_agent']}\". But \"{call['arguments']['other_agent']}\" doesn't exist here!"
                 case "take":
                     mem = f"You just toke {call['arguments']['amount']} of {call['arguments']['objectName']} from nearby."
-                case "exit":
-                    mem = f"You exit. Now you are outside again."
+                case "drop":
+                    mem = f"You just dropped {call['arguments']['amount']} of {call['arguments']['objectName']} from nearby."
             
             self.memory.append(mem)
         

@@ -14,22 +14,18 @@ def get_prompt(input_json, multi_step=False):
 
     function_str_single = r"""
 You can perform one of the following action:
-1. go_to <location>: you can go to the nearby of a location if you are now \"outside\". You cannot go to outside, so choose exit for this case
-2. enter <location>: you can enter a location if you are near to it
-3. exit: you can exit the location you entered. Alias for \"go_to outside\"
-3. take <amount> of <object>: you can pick some amount of objects if it exist in the vicinity
-4. drop <amount> of <object>: you can drop some amount of objects from you
-5. talk to <agent> with \"<content>\": you can talk to an nearby agent with the content. Content should be as daily talk. The agent must exist.
+1. go_to <location>: you can go to the nearby of a location only if you are now \"outside\". You cannot go to outside, so choose \"exit\" for this case
+2. take <amount> of <object>: you can pick some amount of objects if it exist in the vicinity
+3. drop <amount> of <object>: you can drop some amount of objects from you
+4. talk to <agent> with \"<content>\": you can talk to an nearby agent with the content. Content should be as daily talk. The agent must exist.
 """.strip()
 
     function_str_multi = r"""
 You can choose within following action patterns:
 1. go_to <location>: you can go to the nearby of a location only if you are now \"outside\". You cannot go to outside, so choose \"exit\" for this case
-2. enter <location>: you can enter a location if you are near to it
-3. exit: you can exit the location you entered. Alias for \"go_to outside\"
-3. take <amount> of <object>: you can pick some amount of objects if it exist in the vicinity
-4. drop <amount> of <object>: you can drop some amount of objects from you
-5. talk to <agent> with \"<content>\": you can talk to an nearby agent with the content. Content should be as daily talk. The agent must exist.
+2. take <amount> of <object>: you can pick some amount of objects if it exist in the vicinity
+3. drop <amount> of <object>: you can drop some amount of objects from you
+4. talk to <agent> with \"<content>\": you can talk to an nearby agent with the content. Content should be as daily talk. The agent must exist.
 """.strip()
 
     target_single = """
