@@ -37,6 +37,5 @@ if __name__ == "__main__":
 
         return call_batch
 
-    # start_server(process, args.host, args.port)
-    sv = SocketServer(process, None, args.port)
+    sv = SocketServer(process, args.host, args.port)
     sv.start_listening()
