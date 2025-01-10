@@ -1,0 +1,15 @@
+{
+    "documents": [
+        "Name: Elara, Age: 24, Role: Archer",
+        "Rule: Archers rely on agility and precision to strike enemies from afar",
+        "Environment: The dense forest serves as a natural camouflage for archers",
+        "Rule: Archers must conserve arrows and aim for vital spots"
+    ],
+    "metadatas": [
+        {"type": "character_info"},
+        {"type": "rule"},
+        {"type": "environment"},
+        {"type": "rule"}
+    ],
+    "ids": ["char_3", "rule_5", "env_3", "rule_6"]
+}
