@@ -3,6 +3,7 @@ import time
 import json
 from backend import LangchainLLM, SlotFillingLLM
 from backend.sockets.server import SocketServer
+from backend.workers_pool import WorkersPool
 
 
 def parse_args():
@@ -25,18 +26,8 @@ if __name__ == "__main__":
     llm = SlotFillingLLM()
     # llm = LangchainLLM()
 
-    def process(input_state, memory):
-        if args.profile:
-            start_time = time.time()
-
-        call_batch = llm.iterate_step([input_state])
-
-        if args.profile:
-            end_time = time.time()
-            print(f"Finished in {end_time-start_time:.4f}s")
-
-        return call_batch
+    workers_pool = WorkersPool(num_workers=1)
 
     # start_server(process, args.host, args.port)
-    sv = SocketServer(process, None, args.port)
+    sv = SocketServer(workers_pool, None, args.port)
     sv.start_listening()

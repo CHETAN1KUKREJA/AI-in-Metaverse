@@ -4,8 +4,8 @@ import sys
 from backend.sockets.client import SocketClient
 
 class SocketServer():
-    def __init__(self, process, host = "", port = 33455):
-        self.process = process
+    def __init__(self, workers_pool, host = "", port = 33455):
+        self.workers_pool = workers_pool
         self.host = host
         self.port = port
         self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -58,7 +58,7 @@ class SocketServer():
         try:
             while self.is_listening:
                 (client_socket, client_address) = self.server_socket.accept()
-                client = SocketClient(self.process, client_socket, client_address)
+                client = SocketClient(self.workers_pool, client_socket, client_address)
            
                 # Start a new thread for the client
                 thread = Thread(target = client.start_reading)

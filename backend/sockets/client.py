@@ -2,10 +2,10 @@ import json
 import time
 
 class SocketClient():
-    def __init__(self, process, socket, address):
+    def __init__(self, workers_pool, socket, address):
         self.socket = socket
         self.address = address
-        self.process = process
+        self.workers_pool = workers_pool
         self.memory = None
         self.is_running = True
         
@@ -39,7 +39,7 @@ class SocketClient():
                 print(f"Received request from address: {self.address}, request:\n {request_json}")
                 
                 before_process = time.time()
-                call_batch = self.process(request_json, self.memory)
+                call_batch = self.workers_pool.process(request_json, self.memory)
                 after_process = time.time()
                 
                 print(f"Processed request, sending response: {call_batch}")
@@ -47,9 +47,6 @@ class SocketClient():
                 
                 response_json = json.dumps(call_batch) + "\n"
                 self.socket.sendall(response_json.encode('utf-8'))
-                
-                # response_json = self._read_until_json()
-                # print(f"Recieved response from GODOT team: {response_json}")
                 
             except Exception as e:
                 print(f"Error: {e}")

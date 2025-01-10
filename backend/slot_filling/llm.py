@@ -34,3 +34,6 @@ class LLM:
         call_batch = self.summarizer.iterate_step(response_batch)
         self.update_memory(call_batch)
         return call_batch
+    
+    def process(self, json, memory):
+        pass
