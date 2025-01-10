@@ -2,7 +2,7 @@ import argparse
 import time
 import json
 from backend import LangchainLLM, SlotFillingLLM
-from backend.communication import start_server
+from backend.sockets.server import SocketServer
 
 
 def parse_args():
@@ -25,7 +25,7 @@ if __name__ == "__main__":
     llm = SlotFillingLLM()
     # llm = LangchainLLM()
 
-    def process(input_state):
+    def process(input_state, memory):
         if args.profile:
             start_time = time.time()
 
@@ -37,4 +37,6 @@ if __name__ == "__main__":
 
         return call_batch
 
-    start_server(process, args.host, args.port)
+    # start_server(process, args.host, args.port)
+    sv = SocketServer(process, None, args.port)
+    sv.start_listening()

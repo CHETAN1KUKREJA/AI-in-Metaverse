@@ -6,11 +6,13 @@ class SocketClient():
         self.socket = socket
         self.address = address
         self.process = process
+        self.memory = None
+        self.is_running = True
         
     def _read_until_json(self):
         # Receive data
         data = ""
-        while True:
+        while self.is_running:
             chunk = self.socket.recv(1024).decode('utf-8')
             if not chunk:  # Client closed connection
                 print("Client disconnected")
@@ -21,24 +23,23 @@ class SocketClient():
                 json_data = json.loads(data)
                 break
             except json.JSONDecodeError:
-                continue
+                continue    
+        return data
+    
+    def stop_reading(self):
+        self.is_running = False
+        self.socket.close()
         
     def start_reading(self):
         print(f"Connected to client at {self.address}, starting to read")
         
-        # PROTOCOL FOR READING:
-        # 1. Read until a valid JSON object is received
-        # 2. Process the JSON object
-        # 3. Send the response as a JSON object
-        # 4. Wait for response from GODOT team
-        
-        while True:
+        while self.is_running:
             try:
                 request_json = self._read_until_json()
                 print(f"Received request from address: {self.address}, request:\n {request_json}")
                 
                 before_process = time.time()
-                call_batch = self.process(request_json)
+                call_batch = self.process(request_json, self.memory)
                 after_process = time.time()
                 
                 print(f"Processed request, sending response: {call_batch}")
@@ -47,8 +48,8 @@ class SocketClient():
                 response_json = json.dumps(call_batch) + "\n"
                 self.socket.sendall(response_json.encode('utf-8'))
                 
-                response_json = self._read_until_json()
-                print(f"Recieved response from GODOT team: {response_json}")
+                # response_json = self._read_until_json()
+                # print(f"Recieved response from GODOT team: {response_json}")
                 
             except Exception as e:
                 print(f"Error: {e}")
