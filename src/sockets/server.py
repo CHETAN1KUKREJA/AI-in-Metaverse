@@ -1,6 +1,6 @@
 import socket
 from threading import Thread
-from client import SocketClient
+from .client import SocketClient
 
 
 class SocketServer:

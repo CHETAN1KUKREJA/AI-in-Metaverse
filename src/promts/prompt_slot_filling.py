@@ -1,8 +1,8 @@
-from prompt_sections.world import get_world_prompt
-from prompt_sections.vicinity import get_vicinity_prompt
-from prompt_sections.agent import get_agent_prompt
-from prompt_sections.contrast import get_contracts_prompt
-from prompt_sections.system import get_system_prompt
+from .prompt_sections.world import get_world_prompt
+from .prompt_sections.vicinity import get_vicinity_prompt
+from .prompt_sections.agent import get_agent_prompt
+from .prompt_sections.contrast import get_contracts_prompt
+from .prompt_sections.system import get_system_prompt
 
 
 def get_prompt(input_json, multi_step=False):

@@ -1,5 +1,5 @@
 import threading
-from slot_filling.llm import LLM
+from .slot_filling.llm import LLM
 
 
 class WorkerAgent:

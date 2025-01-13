@@ -1,4 +1,3 @@
-from slot_filling.llm import LLM as SlotFillingLLM
-from langchain.llm import LLM as LangchainLLM
+from .workers_pool import WorkersPool
 
-__all__ = ["SlotFillingLLM", "LangchainLLM"]
+__all__ = ["WorkersPool"]
