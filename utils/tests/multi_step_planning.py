@@ -2,7 +2,7 @@ import argparse
 import time
 import json
 from backend import LangchainLLM, SlotFillingLLM
-from simulation.simulator import Simulator
+from utils.simulation.simulator import Simulator
 
 
 def parse_args():

@@ -3,7 +3,7 @@ import argparse
 import time
 import json
 from backend.slot_filling.planer import Planer
-from simulation.simulator import Simulator
+from utils.simulation.simulator import Simulator
 
 def parse_args():
     parse = argparse.ArgumentParser(description="Prompt Engineering")

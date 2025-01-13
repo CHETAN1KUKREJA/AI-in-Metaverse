@@ -1,9 +1,9 @@
 import argparse
 import time
 import json
-from backend import LangchainLLM, SlotFillingLLM
-from backend.sockets.server import SocketServer
-from backend.workers_pool import WorkersPool
+from models import LangchainLLM, SlotFillingLLM
+from sockets.server import SocketServer
+from models.workers_pool import WorkersPool
 
 
 def parse_args():

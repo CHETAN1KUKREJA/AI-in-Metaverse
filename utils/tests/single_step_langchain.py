@@ -3,7 +3,7 @@ import argparse
 import time
 import json
 from backend.langchain.llm import LLM
-from simulation.simulator import Simulator
+from utils.simulation.simulator import Simulator
 from input_processing.prompt import get_prompt
 
 def parse_args():
