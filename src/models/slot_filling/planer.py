@@ -1,8 +1,6 @@
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM, BitsAndBytesConfig
-from input_processing.prompt_slot_filling import get_prompt
-import regex
-import json
+from src.promts.prompt_slot_filling import get_prompt
 
 
 class Planer:

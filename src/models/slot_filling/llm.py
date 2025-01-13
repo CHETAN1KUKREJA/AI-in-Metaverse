@@ -1,6 +1,7 @@
-from backend.slot_filling.planer import Planer
-from backend.slot_filling.summarizer import LLMSummarizer, PatternSummarizer
+from planer import Planer
+from summarizer import LLMSummarizer, PatternSummarizer
 import json
+
 
 # Qwen/Qwen2.5-7B-Instruct
 # Qwen/Qwen2.5-14B-Instruct
@@ -8,12 +9,13 @@ import json
 # Qwen/Qwen2.5-14B-Instruct-AWQ
 
 class LLM:
-    def __init__(self, planer_model_path="Qwen/Qwen2.5-14B-Instruct-AWQ", summarizer_model_path=None, multi_step = False):
+    def __init__(self, planer_model_path="Qwen/Qwen2.5-14B-Instruct-AWQ", summarizer_model_path=None, multi_step=False):
         self.planer = Planer(planer_model_path, multi_step=multi_step)
-        self.summarizer = LLMSummarizer(summarizer_model_path) if summarizer_model_path is not None else PatternSummarizer()
-        
+        self.summarizer = LLMSummarizer(
+            summarizer_model_path) if summarizer_model_path is not None else PatternSummarizer()
+
         self.memory = []
-        
+
     def update_memory(self, call_batch):
         calls = call_batch[0]
         for call in calls:
@@ -26,14 +28,14 @@ class LLM:
                     mem = f"You just toke {call['arguments']['amount']} of {call['arguments']['objectName']} from nearby."
                 case "drop":
                     mem = f"You just dropped {call['arguments']['amount']} of {call['arguments']['objectName']} from nearby."
-            
+
             self.memory.append(mem)
-        
+
     def iterate_step(self, input_jsons):
         response_batch = self.planer.iterate_step(input_jsons, self.memory)
         call_batch = self.summarizer.iterate_step(response_batch)
         self.update_memory(call_batch)
         return call_batch
-    
+
     def process(self, json, memory):
         return self.iterate_step([json])

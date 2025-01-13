@@ -10,8 +10,10 @@ model_name = "mistralai/Mistral-7B-Instruct-v0.2"
 quantization_config = BitsAndBytesConfig(load_in_4bit=True)
 
 # Load the model and tokenizer from Hugging Face
-model = AutoModelForCausalLM.from_pretrained(model_name, torch_dtype=torch.bfloat16, quantization_config=quantization_config, device_map="auto")
+model = AutoModelForCausalLM.from_pretrained(model_name, torch_dtype=torch.bfloat16,
+                                             quantization_config=quantization_config, device_map="auto")
 tokenizer = AutoTokenizer.from_pretrained(model_name)
+
 
 class CustomLLMMistral(LLM):
     model: MistralForCausalLM
@@ -21,7 +23,8 @@ class CustomLLMMistral(LLM):
     def _llm_type(self) -> str:
         return "custom"
 
-    def _call(self, prompt: str, stop: Optional[List[str]] = None, run_manager: Optional[CallbackManagerForLLMRun] = None) -> str:
+    def _call(self, prompt: str, stop: Optional[List[str]] = None,
+              run_manager: Optional[CallbackManagerForLLMRun] = None) -> str:
         messages = [
             {"role": "user", "content": prompt},
         ]
@@ -30,7 +33,8 @@ class CustomLLMMistral(LLM):
         model_inputs = encodeds.to(self.model.device)
 
         generated_ids = self.model.generate(
-            model_inputs, max_new_tokens=512, do_sample=True, pad_token_id=tokenizer.eos_token_id, top_k=4, temperature=0.7
+            model_inputs, max_new_tokens=512, do_sample=True, pad_token_id=tokenizer.eos_token_id, top_k=4,
+            temperature=0.7
         )
         decoded = self.tokenizer.batch_decode(generated_ids)
 
@@ -48,5 +52,6 @@ class CustomLLMMistral(LLM):
     @property
     def _identifying_params(self) -> Mapping[str, Any]:
         return {"model": self.model}
+
 
 llm_mistral = CustomLLMMistral(model=model, tokenizer=tokenizer)

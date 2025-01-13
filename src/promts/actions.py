@@ -1,8 +1,5 @@
-import json
-
-
 def go_to(
-    location: str,
+        location: str,
 ):
     """
     Go to a location.
@@ -13,7 +10,7 @@ def go_to(
 
 
 def take(
-    objectName: str,
+        objectName: str,
 ):
     """
     Take the object.
@@ -21,10 +18,10 @@ def take(
     Args:
         objectName: The name of the object to take with you
     """
-    
-    
+
+
 def drop(
-    objectName: str,
+        objectName: str,
 ):
     """
     Drop the object.
@@ -35,8 +32,8 @@ def drop(
 
 
 def talk(
-    other_agent: str,
-    message: str,
+        other_agent: str,
+        message: str,
 ):
     """
     Talk with existing angent. The agent must appears in the information given. If you are asking questions, and need to hear the reply, you have to stop and wait.
@@ -46,8 +43,9 @@ def talk(
         message: the message to be talked.
     """
 
+
 def enter(
-    location: str,
+        location: str,
 ):
     """
     Enter a location.
@@ -56,14 +54,16 @@ def enter(
         location: The location to enter
     """
 
+
 def exit(
 ):
     """
     exit the location.
     """
 
+
 def play(
-    objectName: str,
+        objectName: str,
 ):
     """
     Play the object.
@@ -71,6 +71,7 @@ def play(
     Args:
         objectName: The name of the object to to drop
     """
+
 
 tools = [go_to, take, drop, play, enter, exit, talk]
 

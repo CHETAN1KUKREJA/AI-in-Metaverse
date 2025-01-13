@@ -1,5 +1,4 @@
 def get_world_prompt(input_json):
-
     # generated the detailed description of the world based on locations
 
     locations = input_json["locations"]
@@ -16,12 +15,12 @@ def get_world_prompt(input_json):
     #     f"The current time in your world is {input_json['datetime']}, There are a number of locations in your world and their descriptions are as follows:"
     #     + world_description
     # )
-    
+
     ret = f"The current time in your world is {input_json['datetime']}, There are a number of locations in your world:\n"
     for idx, location in enumerate(locations):
-        ret += f"{idx+1}: {location['name']}\n"
+        ret += f"{idx + 1}: {location['name']}\n"
         ret += f"- Usage: {location['usage']}\n"
-        
+
         match location['range']:
             case "next_to":
                 ret += f"- You are next to it."

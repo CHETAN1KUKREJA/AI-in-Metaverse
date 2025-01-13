@@ -1,8 +1,8 @@
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain.agents import create_json_chat_agent, AgentExecutor
 
-from backend.langchain.input_prompt import prompt_example, human, system
-from backend.langchain.tools import *
+from input_prompt import prompt_example, human, system
+from tools import *
 
 
 class LLM:

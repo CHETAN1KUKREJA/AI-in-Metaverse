@@ -1,13 +1,13 @@
 import threading
-from backend.slot_filling.llm import LLM
+from slot_filling.llm import LLM
 
 
-class WorkerAgent():
+class WorkerAgent:
     id_counter = 0
 
-    def __init__(self, id):
+    def __init__(self, w_id):
         self.llm = LLM()
-        self.worker_id = id
+        self.worker_id = w_id
 
     def process(self, request, memory):
         return self.llm.process(request, memory)

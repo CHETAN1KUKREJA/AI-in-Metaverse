@@ -1,9 +1,10 @@
 import socket
 from threading import Thread
-from backend.sockets.client import SocketClient
+from client import SocketClient
 
-class SocketServer():
-    def __init__(self, workers_pool, host = "", port = 33455):
+
+class SocketServer:
+    def __init__(self, workers_pool, host="", port=33455):
         self.workers_pool = workers_pool
         self.host = host
         self.port = port
@@ -12,9 +13,8 @@ class SocketServer():
         self.server_socket.bind((self.host, self.port))
         self.server_socket.listen(socket.SOMAXCONN)
         self.client_threads = []
-        
-    
-    def start_listening(self, connection_number = socket.SOMAXCONN):
+
+    def start_listening(self, connection_number=socket.SOMAXCONN):
         """
         !THIS FUNCTION IS A BLOCKING FUNCTION!
         Starts listening for incoming connections on the server socket and spawns a new
@@ -31,17 +31,17 @@ class SocketServer():
         Raises:
             OSError: If the socket cannot listen for connections.
         """
-        
+
         print(f"Server is listening on {self.host}:{self.port}")
-        
+
         self.server_socket.listen(connection_number)
         try:
             while True:
                 (client_socket, client_address) = self.server_socket.accept()
                 client = SocketClient(self.workers_pool, client_socket, client_address)
-           
+
                 # Start a new thread for the client
-                thread = Thread(target = client.start_reading)
+                thread = Thread(target=client.start_reading)
                 thread.start()
                 self.client_threads.append(thread)
         except:
