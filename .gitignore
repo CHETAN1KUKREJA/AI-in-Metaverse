@@ -3,3 +3,4 @@ cached_models/**
 cuda/**
 cuda.sh
 **/*.temp
+.idea
