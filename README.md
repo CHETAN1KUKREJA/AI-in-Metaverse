@@ -4,6 +4,16 @@
 
 Install the conda environment according to the `environment_setup.md`
 
+## Project Structure
+
+- /resources - Folder for not-code files
+- /src - Folder for all main project-related code files
+  - /src/llm - Folder for request-processing code
+  - /src/promts - Folder for promt-generation code
+  - /src/sockets - Folder for socket-connectivity code
+- /utils - Folder for additional testing/simulating/etc. of main project-related code
+
+
 ## Prompt Engineering
 
 ### Example Prompt
