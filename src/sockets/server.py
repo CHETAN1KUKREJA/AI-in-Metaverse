@@ -31,9 +31,7 @@ class SocketServer:
         Raises:
             OSError: If the socket cannot listen for connections.
         """
-
-        print(f"Server is listening on {self.host}:{self.port}")
-
+        
         self.server_socket.listen(connection_number)
         try:
             while True:

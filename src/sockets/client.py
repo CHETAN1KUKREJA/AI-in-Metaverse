@@ -42,13 +42,21 @@ class SocketClient:
                 request_json = json.loads(request_str)
 
                 before_process = time.time()
-                call_batch = self.workers_pool.process(request_json, self.memory)
+                
+                # Process the request and get the response with call, but only ONE time
+                # TODO: (check if the json format corresponds to the expected one from the godot team)
+                ([call,], [reason,]) = self.workers_pool.process([request_json], [self.memory])
                 after_process = time.time()
+                
+                print(f"========== Request processed ==========")
+                print(f"[1] Source address: {self.address}")
+                print(f"[2] Processing time: {after_process - before_process}")
+                print(f"[3] Generated reason: \n {reason}\n")
+                print(f"[4] Generated response: \n {call}")
+                print(f"=======================================")
+                
 
-                print(f"Processed request, sending response: {call_batch}")
-                print(f"Processing time: {after_process - before_process}")
-
-                response_json = json.dumps(call_batch) + "\n"
+                response_json = json.dumps(call) + "\n"
                 self.socket.sendall(response_json.encode('utf-8'))
 
             except Exception as e:

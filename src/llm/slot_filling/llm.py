@@ -32,10 +32,23 @@ class LLM:
             self.memory.append(mem)
 
     def iterate_step(self, input_jsons):
-        response_batch = self.planer.iterate_step(input_jsons, self.memory)
-        call_batch = self.summarizer.iterate_step(response_batch)
+        (action_batch, reason_batch) = self.planer.iterate_step(input_jsons, self.memory)
+        call_batch = self.summarizer.iterate_step(action_batch)
         self.update_memory(call_batch)
-        return call_batch
+        return (call_batch, reason_batch)
 
-    def process(self, json, memory):
-        return self.iterate_step([json])
+    """
+    Processes the given JSON requests and the current corresponding memories, performing a single iteration
+    step for the LLM. It updates the memories accordingly and returns the resulting call and reason
+    batches.
+    Args:
+        requests (list of JSON): The input data specifying the requests to be processed by the LLM.
+        memory: The current memories representing historical context or events.
+    Returns:
+        tuple: A tuple containing two elements:
+            - call_batch: The generated actions (calls) determined by the LLM.
+            - reason_batch: The explanations or justifications for the generated actions.
+    """
+    def process(self, requests, memories):
+        return self.iterate_step(requests)
+    # TODO: Implement memory usage

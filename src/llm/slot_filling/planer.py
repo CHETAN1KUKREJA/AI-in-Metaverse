@@ -1,6 +1,6 @@
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM, BitsAndBytesConfig
-from src.promts import get_prompt
+from promts import get_prompt
 
 
 class Planer:
@@ -75,5 +75,4 @@ class Planer:
         prompt_batch = self.preprocess(input_jsons, performed_actions)
         response_batch = self.generate_step(prompt_batch)
         action_batch = self.postprocess(response_batch)
-        print(response_batch[0])
-        return action_batch
+        return (action_batch, response_batch)
