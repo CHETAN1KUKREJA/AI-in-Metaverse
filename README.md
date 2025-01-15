@@ -261,6 +261,20 @@ Finished in 5.5919s
 
 As summary, multi-step planning is taking more time for planning additional steps as well as sacrificing some performance (intelligence), since the confident interval decrease exponentially. Also, if the state of an agent changes during executing and LLM need to re-plan, the rest of the commands is wasted as well as the time for planning them. I would recommand to use the single step planning. Noe the single step planning returns a list of a single call. This should fulfills the requirement of the godot team.
 
+#### Update: Further speed up using vllm
+
+The LLM processing is further speed up! It now only consume 1.4~1.9s to generate the output without lossing quality. An example output would be:
+
+```
+############################################
+Processed prompts: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:01<00:00,  1.89s/it, est. speed input: 303.91 toks/s, output: 35.41 toks/s]
+([[{'name': 'go_to', 'arguments': {'location': 'forest'}}]], ['I am currently located outside with 10 units of money. My goal is to gather more resources or find opportunities to increase my money. Since the market is closed and there are no objects or agents nearby, I should head to the forest to potentially gather fruits which could be valuable for trading later on.\n\nAction: go_to forest'])
+Finished in 1.8997s
+############################################
+```
+
+But it will consume ALL the VRAM for caching KV pairs. That's the reason that it can speed things up so much.
+
 ### Langchain Method
 
 We also tried Langchain framework with inner LLM `Mistral-7B-Instruct`. It is not as intelligent as the above `Qwen2.5-14B-Instruct`, so it's halllucinating most of the time. Also it's even slower than `Qwen2.5-14B-Instruct`. Here is some sample outputs:
