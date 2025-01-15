@@ -1,6 +1,6 @@
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM, BitsAndBytesConfig
-from promts import tools
+from src.promts import tools
 import regex
 import json
 import re

@@ -40,3 +40,9 @@ pip install langchain
 pip install accelerate
 pip install -U bitsandbytes
 ```
+
+Install vllm (vllm has a strong dependency on torch version, make sure that they fit rach other):
+
+```bash
+pip install vllm
+```

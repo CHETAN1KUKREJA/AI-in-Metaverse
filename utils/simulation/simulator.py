@@ -1,7 +1,7 @@
-from simulation.location import Location
-from simulation.agent import Agent
-from simulation.object import Object
-from simulation.world import World
+from utils.simulation.location import Location
+from utils.simulation.agent import Agent
+from utils.simulation.object import Object
+from utils.simulation.world import World
 
 
 class Simulator:

@@ -1,19 +1,16 @@
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM, BitsAndBytesConfig
-from promts import get_prompt
+from vllm import LLM, SamplingParams
+from src.promts import get_prompt
 
 
 class Planer:
     def __init__(self, model_path: str, cache_dir="cached_models", multi_step=False):
         self.tokenizer = AutoTokenizer.from_pretrained(model_path, cache_dir=cache_dir)
 
-        self.model = AutoModelForCausalLM.from_pretrained(
-            model_path,
-            cache_dir=cache_dir,
-            device_map="auto",
-            torch_dtype="auto",
-            attn_implementation="flash_attention_2"
-        )
+        self.sampling_params = SamplingParams(temperature=0.7, top_p=0.8, repetition_penalty=1.05, max_tokens=512)
+
+        self.model = LLM(model=model_path, gpu_memory_utilization=1.0, tensor_parallel_size=2, disable_custom_all_reduce=True, enforce_eager=True)
         
         self.multi_step = multi_step
 
@@ -42,26 +39,27 @@ class Planer:
                 self.tokenizer.apply_chat_template(
                     messages,
                     add_generation_prompt=True,
-                    return_tensors="pt",
+                    # return_tensors="pt",
                     tokenize=False,
                 )
             )
 
-        inputs_batch = self.tokenizer(inputs_batch)
-        input_ids_batch = torch.tensor(inputs_batch["input_ids"]).to(self.model.device)
-        attn_mask_batch = torch.tensor(inputs_batch["attention_mask"]).to(self.model.device)
+        # inputs_batch = self.tokenizer(inputs_batch)
+        # input_ids_batch = torch.tensor(inputs_batch["input_ids"]).to(self.model.device)
 
-        output_ids_batch = self.model.generate(
-            input_ids_batch,
-            attention_mask=attn_mask_batch,
-            max_new_tokens=512,
-            do_sample=True,
-            top_p=0.8,
-            temperature=0.3,
+        outputs = self.model.generate(
+            inputs_batch,
+            self.sampling_params
         )
 
-        generated_ids = [output_ids[len(input_ids) :] for input_ids, output_ids in zip(input_ids_batch, output_ids_batch)]
-        response_batch = self.tokenizer.batch_decode(generated_ids, skip_special_tokens=True)
+        # generated_ids = [output_ids[len(input_ids) :] for input_ids, output_ids in zip(input_ids_batch, output_ids_batch)]
+        # response_batch = self.tokenizer.batch_decode(generated_ids, skip_special_tokens=True)
+        
+        response_batch = []
+        for output in outputs:
+            response = output.outputs[0].text
+            response_batch.append(response)               
+        
         return response_batch
 
     def postprocess(self, response_batch):

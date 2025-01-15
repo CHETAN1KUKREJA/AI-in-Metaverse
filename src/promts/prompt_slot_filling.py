@@ -24,13 +24,13 @@ You can choose within following action patterns:
     function_str_multi = r"""
 You can choose within following action patterns:
 1. go_to <location>: you can go to the nearby of a location. The location can be an object name in order to go to the nearby of that object
-2. take <amount> of <object>: you can pick some amount of objects if it exist in the vicinity
-3. drop <amount> of <object>: you can drop some amount of objects from you
+2. take <amount> of <object>: you can pick some amount of objects ONLY if it exist in the vicinity
+3. drop <amount> of <object>: you can drop some amount of objects from you ONLY if you have it in your inventory
 4. talk to <agent> with \"<content>\": you can talk to an nearby agent with the content. Content should be as daily talk. The agent must exist.
 """.strip()
 
     target_single = """
-Think step by step and output briefly your thought with 2 to 3 sentences. Pay attention to the restriction of the actions when choosing. You must pay attention to the current state and vicinity. What you have done is also important, because you should not repeat meaningless. Finally output the action in a new line with the format \"Action: <action>\".    
+Think step by step and output briefly your thought with several sentences. Pay attention to the restriction of the actions when choosing. You must pay attention to the current state and vicinity. What you have done is also important, because you should not repeat meaningless. Finally output the action in a NEW line with the format \"Action: <action>\".    
 """
     
     target_multi = """
