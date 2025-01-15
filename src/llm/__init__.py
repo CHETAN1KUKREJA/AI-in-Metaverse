@@ -1,3 +1,3 @@
-from .workers_pool import WorkersPool
+from .workers_pool_distributed import DistributedWorkersPool
 
-__all__ = ["WorkersPool"]
+__all__ = ["DistributedWorkersPool"]

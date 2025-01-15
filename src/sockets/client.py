@@ -14,7 +14,7 @@ class SocketClient:
         # Receive data
         data = ""
         while self.is_running:
-            chunk = self.socket.recv(1024).decode('utf-8')
+            chunk = self.socket.recv(1024).decode("utf-8")
 
             if chunk == "":
                 break
@@ -41,26 +41,25 @@ class SocketClient:
             try:
                 request_str = self._read_until_json()
                 print(f"Received request from address: {self.address}\n - Request: {request_str}")
-                
+
                 request_json = json.loads(request_str)
 
                 before_process = time.time()
-                
+
                 # Process the request and get the response with call, but only ONE time
                 # TODO: (check if the json format corresponds to the expected one from the godot team)
-                ([call,], [reason,]) = self.workers_pool.process([request_json], [self.memory])
+                ([call], [reason]) = self.workers_pool.process([request_json], [self.memory])
                 after_process = time.time()
-                
+
                 print(f"========== Request processed ==========")
                 print(f"[1] Source address: {self.address}")
                 print(f"[2] Processing time: {after_process - before_process}")
                 print(f"[3] Generated reason: \n {reason}\n")
                 print(f"[4] Generated response: \n {call}")
                 print(f"=======================================")
-                
 
                 response_json = json.dumps(call) + "\n"
-                self.socket.sendall(response_json.encode('utf-8'))
+                self.socket.sendall(response_json.encode("utf-8"))
 
             except Exception as e:
                 print(f"Error during reveiving request: {e}")

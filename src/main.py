@@ -1,21 +1,21 @@
 from sockets import SocketServer
-from llm import WorkersPool
+from llm import DistributedWorkersPool
 
 NUMBER_OF_WORKERS = 2
 PORT = 33455
 HOST = ""
 
+
 def start_server():
-    
+
     print("========== Initializing Workers ==========")
-    workers_pool = WorkersPool(num_workers=NUMBER_OF_WORKERS)
-    
+    workers_pool = DistributedWorkersPool()
+
     sv = SocketServer(workers_pool, host=HOST, port=PORT)
-    
-    print(f"========== Server started at \"{HOST}:{PORT}\" ==========")
+
+    print(f'========== Server started at "{HOST}:{PORT}" ==========')
     sv.start_listening()
-    
-    
+
 
 if __name__ == "__main__":
     start_server()
