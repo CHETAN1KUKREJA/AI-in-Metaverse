@@ -15,13 +15,16 @@ class SocketClient:
         data = ""
         while self.is_running:
             chunk = self.socket.recv(1024).decode('utf-8')
+
+            if chunk == "":
+                break
             if not chunk:  # Client closed connection
                 print("Client disconnected")
                 break
             data += chunk
 
             try:
-                json_data = json.loads(data)
+                _ = json.loads(data)
                 break
             except json.JSONDecodeError:
                 continue
@@ -37,8 +40,8 @@ class SocketClient:
         while self.is_running:
             try:
                 request_str = self._read_until_json()
-                print(f"Received request from address: {self.address}")
-
+                print(f"Received request from address: {self.address}\n - Request: {request_str}")
+                
                 request_json = json.loads(request_str)
 
                 before_process = time.time()
@@ -60,5 +63,5 @@ class SocketClient:
                 self.socket.sendall(response_json.encode('utf-8'))
 
             except Exception as e:
-                print(f"Error: {e.with_traceback()}")
+                print(f"Error during reveiving request: {e}")
                 break
