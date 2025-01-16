@@ -19,3 +19,6 @@ def start_server():
 
 if __name__ == "__main__":
     start_server()
+
+# python src/main.py
+# python src/llm/worker_service.py --registry-host localhost --registry-port 33456 --worker-port 33457
