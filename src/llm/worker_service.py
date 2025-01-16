@@ -19,9 +19,10 @@ class WorkerAgent:
 
 
 class WorkerService:
-    def __init__(self, registry_host: str, registry_port: int, worker_port: int):
+    def __init__(self, registry_host: str, registry_port: int, worker_host: int, worker_port: int):
         self.registry_host = registry_host
         self.registry_port = registry_port
+        self.worker_host = worker_host
         self.worker_port = worker_port
         self.worker_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.worker_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -62,8 +63,8 @@ class WorkerService:
 
                 heartbeat = {
                     "type": "heartbeat",
+                    "host": self.worker_host,
                     "port": self.worker_port,
-                    "host": socket.gethostbyname(socket.gethostname()),
                     "worker_id": self.assigned_worker_id,
                 }
 
@@ -99,8 +100,8 @@ class WorkerService:
                 # Send initial registration heartbeat
                 heartbeat = {
                     "type": "registration",
+                    "host": self.worker_host,
                     "port": self.worker_port,
-                    "host": socket.gethostbyname(socket.gethostname()),
                 }
 
                 print(f"Sending registration heartbeat: {heartbeat}")
@@ -173,8 +174,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Start a worker service")
     parser.add_argument("--registry-host", default="localhost", help="Registry host")
     parser.add_argument("--registry-port", type=int, default=33455, help="Registry port")
+    parser.add_argument("--worker-host", type=str, help="Worker Host")
     parser.add_argument("--worker-port", type=int, required=True, help="Worker port")
-    parser.add_argument("--worker-id", type=int, help="Worker ID (optional)")
 
     args = parser.parse_args()
 
