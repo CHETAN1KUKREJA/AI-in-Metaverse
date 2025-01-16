@@ -139,7 +139,10 @@ class WorkerService:
             # Read request
             data = ""
             while True:
-                chunk = client_socket.recv(1024).decode("utf-8")
+                tmp = client_socket.recv(1024)
+                print(tmp)
+                chunk = tmp.decode("utf-8")
+                
                 if not chunk:
                     break
                 data += chunk

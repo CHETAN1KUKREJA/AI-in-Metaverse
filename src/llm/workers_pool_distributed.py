@@ -167,7 +167,7 @@ class DistributedWorkersPool:
                         worker.is_available = False
                         return worker
 
-            print("No workers available, waiting...")
+            # print("No workers available, waiting...")
 
     def release_worker(self, host: str, port: int) -> None:
         """Mark a worker as available again."""
@@ -188,7 +188,9 @@ class DistributedWorkersPool:
     def process(self, requests: List[dict], memories: List[Optional[dict]]) -> tuple:
         """Process requests using available distributed workers."""
         # Acquire semaphore (waiting for available worker)
+        print("Invoked process in WorkersPool")
         self.empty_sem.acquire()
+        print("Aquired semaphore")
 
         try:
             # May block until a worker is available
@@ -217,9 +219,12 @@ class RemoteWorker:
     def process(self, request: dict, memory: Optional[dict]) -> tuple:
         """Send request to remote worker and get response."""
     
+        print("Invoked process in RemoteWorker")
+    
         payload = {"request": request, "memory": memory}
         request_str = json.dumps(payload) + "\n"
         self.socket.sendall(request_str.encode("utf-8"))
+        print("After sending request")
         # Read response
         response = ""
         while True:
