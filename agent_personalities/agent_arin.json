@@ -4,12 +4,14 @@
         "Rule: Magic spells require mana and precise incantations",
         "Environment: The library is filled with ancient tomes and glowing orbs of light",
         "Rule: Mages are forbidden from using dark magic unless sanctioned by the council"
+        "Openness: Highly curious, frequently explores new possibilities., Conscientiousness: Moderately disciplined, completes tasks but lacks proper planning., Extraversion: Occasionally sociable, prefers small group interactions., Agreeableness: Highly agreeable, prioritizes group harmony over personal interests., Neuroticism: Slightly emotional, experiences frequent stress but maintains productivity.",
     ],
     "metadatas": [
         {"type": "character_info"},
         {"type": "rule"},
         {"type": "environment"},
         {"type": "rule"}
+        {"type": "personality"}
     ],
-    "ids": ["char_2", "rule_3", "env_2", "rule_4"]
+    "ids": ["char_2", "rule_3", "env_2", "rule_4","pers_2"]
 }
