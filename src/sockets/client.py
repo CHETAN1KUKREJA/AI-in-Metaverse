@@ -37,12 +37,14 @@ class SocketClient:
                 break
             data += chunk
 
-            try:
-                _ = json.loads(data)
-                break
-            except json.JSONDecodeError:
-                continue
-        return data
+            json_strs = self.data.split("</end/>")
+            if len(json_strs) > 0:
+                json_list = []
+                for json_str in json_strs[:-1]:
+                    json_list.append(json.loads(json_str))
+
+                self.data = json_strs[-1]
+                return json_list
 
     def stop_reading(self):
         self.is_running = False
@@ -53,10 +55,11 @@ class SocketClient:
 
         while self.is_running:
             try:
-                request_str = self._read_until_json()
-                print(f"Received request from address: {self.address}\n - Request: {request_str}")
-                
-                request_json = json.loads(request_str)
+                request_jsons = self._read_until_json()
+                for request_json in request_jsons:
+                    print(
+                        f"Received request from address: {self.address}"
+                    )
 
                 before_process = time.time()
                 
@@ -73,17 +76,18 @@ class SocketClient:
                 print(f"=======================================")
                 
 
-                response_json = json.dumps(call) + "\n"
-                self.socket.sendall(response_json.encode('utf-8'))
-                
+                response_json = json.dumps(call) + "</end/>\n"
+                self.socket.sendall(response_json.encode("utf-8"))
+                    
                 # Write to Log
-                self.history.append(str((reason, call)))
+                self.history.append(str(reason) + "\n" +  str(call))
                 
-                history_str = '\n'.join(self.history)
+                history_str = "\n\n".join(self.history)
                 with open(self.current_sim_file, 'w') as f:
                     f.write(history_str)
                 
 
             except Exception as e:
                 print(f"Error during reveiving request: {e}")
+                print(e.with_traceback())
                 break

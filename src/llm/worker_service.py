@@ -19,11 +19,12 @@ class WorkerAgent:
 
 
 class WorkerService:
-    def __init__(self, registry_host: str, registry_port: int, worker_host: int, worker_port: int):
+    def __init__(self, registry_host: str, registry_port: int, worker_host: int, worker_port: int, heartbeat_diff_time=4.0):
         self.registry_host = registry_host
         self.registry_port = registry_port
         self.worker_host = worker_host
         self.worker_port = worker_port
+        self.heartbeat_diff_time = heartbeat_diff_time
         self.worker_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.worker_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.is_running = True
@@ -40,11 +41,12 @@ class WorkerService:
         heartbeat_thread = Thread(target=self._send_heartbeat)
         heartbeat_thread.daemon = True
         heartbeat_thread.start()
-
+        
+        client_socket, _ = self.worker_socket.accept()
+        
         # Main service loop
         while self.is_running:
             try:
-                client_socket, _ = self.worker_socket.accept()
                 self._handle_client(client_socket)
             except Exception as e:
                 print(f"Error accepting connection: {e}")
@@ -78,7 +80,7 @@ class WorkerService:
                         break
                     data += chunk
                     try:
-                        response = json.loads(data)
+                        _ = json.loads(data)
                         break
                     except json.JSONDecodeError:
                         continue
@@ -87,7 +89,7 @@ class WorkerService:
             except Exception as e:
                 print(f"Error sending heartbeat: {e}")
 
-            time.sleep(10)  # Send heartbeat every 10 seconds
+            time.sleep(self.heartbeat_diff_time)  # Send heartbeat every 10 seconds
 
     def _register_and_get_id(self):
         """Register with the server and get assigned worker ID."""
@@ -139,48 +141,35 @@ class WorkerService:
             data = ""
             while True:
                 chunk = client_socket.recv(1024).decode("utf-8")
+                
                 if not chunk:
                     break
                 data += chunk
                 try:
+                    
                     payload = json.loads(data)
                     break
                 except json.JSONDecodeError:
                     continue
-
+            
+            
             # Process request using the worker agent
             request = payload["request"]
             memory = payload["memory"]
             response = self.worker.process(request, memory)
-
+            
             # Send response
             response_str = json.dumps(response) + "\n"
+           
             client_socket.sendall(response_str.encode("utf-8"))
         except Exception as e:
             print(f"Error handling client: {e}")
-        finally:
-            client_socket.close()
+            print(e.with_traceback(None))
+        # finally:
+        #     client_socket.close()
 
     def stop(self):
         """Stop the worker service."""
         self.is_running = False
         self.worker_socket.close()
 
-
-# Usage example:
-if __name__ == "__main__":
-    import argparse
-
-    parser = argparse.ArgumentParser(description="Start a worker service")
-    parser.add_argument("--registry-host", default="localhost", help="Registry host")
-    parser.add_argument("--registry-port", type=int, default=33455, help="Registry port")
-    parser.add_argument("--worker-host", type=str, help="Worker Host")
-    parser.add_argument("--worker-port", type=int, required=True, help="Worker port")
-
-    args = parser.parse_args()
-
-    worker = WorkerService(args.registry_host, args.registry_port, args.worker_host, args.worker_port)
-    try:
-        worker.start()
-    except KeyboardInterrupt:
-        worker.stop()
