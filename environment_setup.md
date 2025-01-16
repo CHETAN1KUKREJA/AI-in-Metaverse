@@ -5,8 +5,8 @@
 conda create -n aimetaverse python=3.10 -y
 conda activate aimetaverse
 
-# install packages, torch version is 2.5.1
-pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+# install packages
+pip install torch==2.5.0 torchvision==0.20.0 torchaudio==2.5.0 --index-url https://download.pytorch.org/whl/cu118
 pip install transformers
 pip install modelscope
 pip install transformers
@@ -22,8 +22,8 @@ pip install regrex
 For a faster attention calculation, FlashAttention is used, but it needs to use the cuda compiler to build:
 
 ```bash
-# make sure the gcc version is less equal 12.2
-# install cuda however you want, use the version 12.1
+# make sure the gcc version is 11
+# install cuda however you want, use the version 11.8
 MAX_JOBS=8 pip install flash-attn --no-build-isolation
 ```
 
@@ -41,7 +41,7 @@ pip install accelerate
 pip install -U bitsandbytes
 ```
 
-Install vllm (vllm has a strong dependency on torch version, make sure that they fit each other):
+Install vllm (vllm has a strong dependency on torch version, make sure that they fit rach other):
 
 ```bash
 pip install vllm
