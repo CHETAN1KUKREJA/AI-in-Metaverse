@@ -4,12 +4,14 @@
         "Rule: Fire burns wood",
         "Environment: The forest is dense with trees and has wild animals",
         "Rule: Players cannot exceed 100 health points"
+        "Openness: Verytraditional,avoids new tasks, and prefers established methods.,Conscientiousness: Highly organized, precise, and efficient., Extraversion: Neutral, interacts politely without being overly sociable., Agreeableness: Balanced, friendly, and cooperative without being overly accommodating.,Neuroticism: Very emotionally stable, remains calm and composed under stress.",
     ],
     "metadatas": [
         {"type": "character_info"},
         {"type": "rule"},
         {"type": "environment"},
         {"type": "rule"}
+        {"type": "personality"},
     ],
-    "ids": ["char_1", "rule_1", "env_1", "rule_2"]
+    "ids": ["char_1", "rule_1", "env_1", "rule_2", "pers_1"]
 }
