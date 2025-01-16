@@ -144,25 +144,30 @@ class WorkerService:
                 print(tmp)
                 chunk = tmp.decode("utf-8")
                 
+                print("11111111111")
                 if not chunk:
                     break
                 data += chunk
                 try:
+                    print("22222222222")
                     payload = json.loads(data)
                     break
                 except json.JSONDecodeError:
                     continue
-
+            
+            print("33333333333")
             # Process request using the worker agent
             request = payload["request"]
             memory = payload["memory"]
             response = self.worker.process(request, memory)
-
+            print("44444444444")
             # Send response
             response_str = json.dumps(response) + "\n"
+            print("sending response")
             client_socket.sendall(response_str.encode("utf-8"))
         except Exception as e:
             print(f"Error handling client: {e}")
+            print(e.with_traceback())
         finally:
             client_socket.close()
 

@@ -63,7 +63,7 @@ class SocketClient:
                     print(f"[4] Generated response: \n {call}")
                     print(f"=======================================")
 
-                    response_json = json.dumps(call) + "\n"
+                    response_json = json.dumps(call) + "</end/>\n"
                     self.socket.sendall(response_json.encode("utf-8"))
 
             except Exception as e:
