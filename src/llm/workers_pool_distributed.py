@@ -148,7 +148,6 @@ class DistributedWorkerPool:
         while self.is_running:
             try:
                 client_socket, client_address = self.server_socket.accept()
-                print(f"Accepted connection from {client_address}")
 
                 # Spawn a new thread for each client connection
                 handler_thread = threading.Thread(target=self._handle_single_message, args=(client_socket, client_address))
