@@ -179,7 +179,7 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    worker = WorkerService(args.registry_host, args.registry_port, args.worker_port)
+    worker = WorkerService(args.registry_host, args.registry_port, args.worker_host, args.worker_port)
     try:
         worker.start()
     except KeyboardInterrupt:
