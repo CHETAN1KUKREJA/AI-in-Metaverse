@@ -27,7 +27,7 @@ class WorkerService:
         self.heartbeat_diff_time = heartbeat_diff_time
         self.worker_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.worker_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        self.is_running = False
+        self.is_running = True
         self.worker = None  # Will be initialized after getting ID from server
         self.assigned_worker_id = None
 
@@ -43,8 +43,7 @@ class WorkerService:
         heartbeat_thread.start()
         
         client_socket, _ = self.worker_socket.accept()
-        self.is_running = True
-
+        
         # Main service loop
         while self.is_running:
             try:

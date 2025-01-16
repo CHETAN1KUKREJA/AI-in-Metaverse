@@ -15,9 +15,6 @@ def start_worker():
         worker.start()
     except KeyboardInterrupt:
         worker.stop()
-    
-    print("========== Initializing Workers ==========")
-    worker.start()
 
 if __name__ == "__main__":
     start_worker()
