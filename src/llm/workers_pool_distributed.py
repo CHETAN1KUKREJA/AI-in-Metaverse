@@ -44,18 +44,19 @@ class DistributedWorkerPool:
         connection_id = f"{host}:{port}"
 
         def register():
-            self.workers[connection_id] = WorkerInfo(host=host, port=port, worker_id=worker_id, is_available=True, last_heartbeat=time.time())
             if self.empty_sem is None:
                 self.empty_sem = Semaphore(1)
             else:
                 old_sem = self.empty_sem
-                self.empty_sem = Semaphore(len(self.workers))
+                self.empty_sem = Semaphore(len(self.workers) + 1)
                 while True:
-                    try:
+                    if old_sem._value == len(self.workers):
+                        break
+                    else:
                         old_sem.release()
                         self.empty_sem.acquire(blocking=False)
-                    except (ValueError, threading.BoundedSemaphore.ValueError):
-                        break
+
+            self.workers[connection_id] = WorkerInfo(host=host, port=port, worker_id=worker_id, is_available=True, last_heartbeat=time.time())
             self.worker_available_event.set()
 
             print(f"Registered new worker {worker_id} at {host}:{port}")

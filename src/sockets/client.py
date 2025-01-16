@@ -43,6 +43,7 @@ class SocketClient:
                 print(f"Received request from address: {self.address}\n - Request: {request_str}")
 
                 request_json = json.loads(request_str)
+                print(f"json received: {request_json}")
 
                 before_process = time.time()
 
