@@ -167,9 +167,9 @@ class WorkerService:
             client_socket.sendall(response_str.encode("utf-8"))
         except Exception as e:
             print(f"Error handling client: {e}")
-            print(e.with_traceback())
-        finally:
-            client_socket.close()
+            print(e.with_traceback(None))
+        # finally:
+        #     client_socket.close()
 
     def stop(self):
         """Stop the worker service."""
