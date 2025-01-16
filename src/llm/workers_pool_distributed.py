@@ -16,10 +16,11 @@ class WorkerInfo:
     worker_id: int
     is_available: bool = True
     last_heartbeat: float = time.time()
+    remote_worker: Optional["RemoteWorker"] = None
 
 
-class DistributedWorkerPool:
-    def __init__(self, heartbeat_timeout: float = 30.0, server_port: int = 33456):
+class DistributedWorkersPool:
+    def __init__(self, heartbeat_timeout: float = 8.0, server_port: int = 33456):
         self.workers: Dict[str, WorkerInfo] = {}
         self.lock = Lock()
         self.heartbeat_timeout = heartbeat_timeout
@@ -29,57 +30,50 @@ class DistributedWorkerPool:
         self.is_running = True
         self.worker_available_event = threading.Event()
 
-        # Single server socket for all messages
+        # Single server socket for discovering new workers
         self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.server_socket.bind(("", self.server_port))
         self.server_socket.listen(socket.SOMAXCONN)
 
-        # Single message handling thread
+        # Thread for handling incoming messages from workers (heartbeats and their IP:PORT)
         self.message_thread = Thread(target=self._handle_messages)
         self.message_thread.start()
 
-    def register_worker(self, host: str, port: int, worker_id: int, blocked=True) -> None:
+    def register_worker(self, host: str, port: int, worker_id: int) -> None:
         """Register a new worker in the pool with a specific ID. Replace the old semaphore with a new one."""
         connection_id = f"{host}:{port}"
 
-        def register():
-            if self.empty_sem is None:
-                self.empty_sem = Semaphore(1)
-            else:
-                old_sem = self.empty_sem
-                self.empty_sem = Semaphore(len(self.workers) + 1)
-                while True:
-                    if old_sem._value == len(self.workers):
-                        break
-                    else:
-                        old_sem.release()
-                        self.empty_sem.acquire(blocking=False)
-
-            self.workers[connection_id] = WorkerInfo(host=host, port=port, worker_id=worker_id, is_available=True, last_heartbeat=time.time())
-            self.worker_available_event.set()
-
-            print(f"Registered new worker {worker_id} at {host}:{port}")
-
-        if blocked:
-            with self.lock:
-                register()
+        if self.empty_sem is None:
+            self.empty_sem = Semaphore(1)
         else:
-            register()
+            old_sem = self.empty_sem
+            self.empty_sem = Semaphore(len(self.workers) + 1)
+            while True:
+                if old_sem._value == len(self.workers):
+                    break
+                else:
+                    old_sem.release()
+                    self.empty_sem.acquire(blocking=False)
 
-    def assign_worker_id(self, blocked=True) -> int:
+        # Register worker and open connection to it
+        self.workers[connection_id] = WorkerInfo(host=host, port=port, worker_id=worker_id, is_available=True, last_heartbeat=time.time(), remote_worker=RemoteWorker(host, port))
+        self.workers[connection_id].remote_worker.connect()
+        self.worker_available_event.set()
+
+        print(f"Registered new worker {worker_id} at {host}:{port}")
+            
+
+    def assign_worker_id(self) -> int:
         """Assign a new unique worker ID."""
 
         def assign():
             worker_id = self.next_worker_id
             self.next_worker_id += 1
             return worker_id
-
-        if blocked:
-            with self.lock:
-                return assign()
-        else:
-            return assign()
+        
+        return assign()
+            
 
     def _handle_single_message(self, client_socket, client_address):
         """Handle message from individual client."""
@@ -115,8 +109,9 @@ class DistributedWorkerPool:
                     if exist:
                         print(f"Worker ID {worker_id} already exists, keeping ID {worker_id}")
                     else:
-                        worker_id = self.assign_worker_id(blocked=False)
-                        self.register_worker(worker_host, worker_port, worker_id, blocked=False)
+                        worker_id = self.assign_worker_id()
+                        
+                    self.register_worker(worker_host, worker_port, worker_id)
                     response = {"type": "registration_response", "worker_id": worker_id}
 
             elif message.get("type") == "heartbeat":
@@ -188,6 +183,25 @@ class DistributedWorkerPool:
         self.is_running = False
         self.server_socket.close()
         self.message_thread.join()
+        
+        
+    def process(self, requests: List[dict], memories: List[Optional[dict]]) -> tuple:
+        """Process requests using available distributed workers."""
+        # Acquire semaphore (waiting for available worker)
+        self.empty_sem.acquire()
+
+        try:
+            # May block until a worker is available
+            worker_info = self.get_available_worker()
+
+            try:
+                result = worker_info.remote_worker.process(requests, memories)
+
+                return result
+            finally:
+                self.release_worker(worker_info.host, worker_info.port)
+        finally:
+            self.empty_sem.release()
 
 
 class RemoteWorker:
@@ -202,10 +216,10 @@ class RemoteWorker:
 
     def process(self, request: dict, memory: Optional[dict]) -> tuple:
         """Send request to remote worker and get response."""
+    
         payload = {"request": request, "memory": memory}
         request_str = json.dumps(payload) + "\n"
         self.socket.sendall(request_str.encode("utf-8"))
-
         # Read response
         response = ""
         while True:
@@ -223,34 +237,3 @@ class RemoteWorker:
     def close(self) -> None:
         """Close the connection to the remote worker."""
         self.socket.close()
-
-
-class DistributedWorkersPool:
-    """Drop-in replacement for the original WorkersPool with distributed capabilities."""
-
-    def __init__(self, registry_host: str = "", registry_port: int = 33455):
-        self.worker_pool = DistributedWorkerPool()
-        self.registry_host = registry_host
-        self.registry_port = registry_port
-
-    def process(self, requests: List[dict], memories: List[Optional[dict]]) -> tuple:
-        """Process requests using available distributed workers."""
-        # Acquire semaphore (waiting for available worker)
-        self.worker_pool.empty_sem.acquire()
-
-        try:
-            # May block until a worker is available
-            worker_info = self.worker_pool.get_available_worker()
-
-            try:
-                worker = RemoteWorker(worker_info.host, worker_info.port)
-                worker.connect()
-
-                result = worker.process(requests, memories)
-                worker.close()
-
-                return result
-            finally:
-                self.worker_pool.release_worker(worker_info.host, worker_info.port)
-        finally:
-            self.worker_pool.empty_sem.release()

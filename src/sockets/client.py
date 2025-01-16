@@ -27,7 +27,6 @@ class SocketClient:
             if len(json_strs) > 0:
                 json_list = []
                 for json_str in json_strs[:-1]:
-                    print(json_str)
                     json_list.append(json.loads(json_str))
 
                 self.data = json_strs[-1]
@@ -45,11 +44,8 @@ class SocketClient:
                 request_jsons = self._read_until_json()
                 for request_json in request_jsons:
                     print(
-                        f"Received request from address: {self.address}\n - Request: {request_json}"
+                        f"Received request from address: {self.address}"
                     )
-
-                    # request_json = json.loads(request_str)
-                    print(f"json received: {request_json}")
 
                     before_process = time.time()
 
@@ -72,4 +68,5 @@ class SocketClient:
 
             except Exception as e:
                 print(f"Error during reveiving request: {e}")
+                print(e.with_traceback())
                 break

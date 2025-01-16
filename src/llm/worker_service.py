@@ -19,11 +19,12 @@ class WorkerAgent:
 
 
 class WorkerService:
-    def __init__(self, registry_host: str, registry_port: int, worker_host: int, worker_port: int):
+    def __init__(self, registry_host: str, registry_port: int, worker_host: int, worker_port: int, heartbeat_diff_time=4.0):
         self.registry_host = registry_host
         self.registry_port = registry_port
         self.worker_host = worker_host
         self.worker_port = worker_port
+        self.heartbeat_diff_time = heartbeat_diff_time
         self.worker_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.worker_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.is_running = True
@@ -87,7 +88,7 @@ class WorkerService:
             except Exception as e:
                 print(f"Error sending heartbeat: {e}")
 
-            time.sleep(10)  # Send heartbeat every 10 seconds
+            time.sleep(self.heartbeat_diff_time)  # Send heartbeat every 10 seconds
 
     def _register_and_get_id(self):
         """Register with the server and get assigned worker ID."""
