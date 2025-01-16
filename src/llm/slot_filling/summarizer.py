@@ -69,7 +69,7 @@ class LLMSummarizer:
 class PatternSummarizer:
     
     def parse_action(self, text):
-        text = text.replace("Action: ", "")
+        text = text.strip().replace("Action: ", "")
         actions = [t.strip() for t in text.split(",")]
         
         patterns = {
