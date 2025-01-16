@@ -1,0 +1,80 @@
+{
+    "world": {
+        "datetime": "15.12.2024 10am",
+        "locations": [
+            {
+                "name": "market",
+                "usage": "Trade objects with other agents. But it's closed now, currently there is no agents there. Reopen time is unknown.",
+                "distance": 2.8284271247461903,
+                "range": "can_see"
+            },
+            {
+                "name": "forest",
+                "usage": "You can pick fruit in the forest. The fruit can be used trade.",
+                "distance": 25.45584412271571,
+                "range": "can_see"
+            },
+            {
+                "name": "outside",
+                "usage": "go to locations",
+                "distance": 11.313708498984761,
+                "range": "inside"
+            }
+        ]
+    },
+    "vicinity": {
+        "objects": [],
+        "agents": [],
+        "audio": []
+    },
+    "agent": {
+        "name": "George",
+        "health": 20,
+        "hunger": 3,
+        "happiness": 5,
+        "location": "outside",
+        "currentAction": "None",
+        "actionProgress": -1,
+        "age": 23,
+        "hands": [
+            {
+                "name": "money",
+                "amount": 10
+            }
+        ],
+        "inventory": [],
+        "ownership": []
+    },
+    "contracts": [],
+    "system": [],
+    "actions": [
+        {
+            "name": "go_to",
+            "available": true
+        },
+        {
+            "name": "talk",
+            "available": true
+        },
+        {
+            "name": "take",
+            "available": true
+        },
+        {
+            "name": "drop",
+            "available": true
+        },
+        {
+            "name": "enter",
+            "available": true
+        },
+        {
+            "name": "exit",
+            "available": true
+        },
+        {
+            "name": "play",
+            "available": false
+        }
+    ]
+}</end/>
