@@ -80,7 +80,7 @@ class WorkerService:
                         break
                     data += chunk
                     try:
-                        response = json.loads(data)
+                        _ = json.loads(data)
                         break
                     except json.JSONDecodeError:
                         continue
@@ -140,8 +140,7 @@ class WorkerService:
             # Read request
             data = ""
             while True:
-                tmp = client_socket.recv(1024)
-                chunk = tmp.decode("utf-8")
+                chunk = client_socket.recv(1024).decode("utf-8")
                 
                 if not chunk:
                     break
@@ -174,21 +173,3 @@ class WorkerService:
         self.is_running = False
         self.worker_socket.close()
 
-
-# Usage example:
-if __name__ == "__main__":
-    import argparse
-
-    parser = argparse.ArgumentParser(description="Start a worker service")
-    parser.add_argument("--registry-host", default="localhost", help="Registry host")
-    parser.add_argument("--registry-port", type=int, default=33455, help="Registry port")
-    parser.add_argument("--worker-host", type=str, help="Worker Host")
-    parser.add_argument("--worker-port", type=int, required=True, help="Worker port")
-
-    args = parser.parse_args()
-
-    worker = WorkerService(args.registry_host, args.registry_port, args.worker_host, args.worker_port)
-    try:
-        worker.start()
-    except KeyboardInterrupt:
-        worker.stop()
