@@ -14,7 +14,7 @@ Install the conda environment according to the `environment_setup.md`
 - /utils - Folder for additional testing/simulating/etc. of main project-related code
 
 
-## Prompt Engineering
+## Prompt Engineering (Some stuff may be deprecated)
 
 ### Example Prompt
 
