@@ -68,32 +68,32 @@ class LLMSummarizer:
 
 class PatternSummarizer:
     
-    def parse_action(self, text):
+    def parse_action(self, text, actor_name): # TODO change the direct parameter of actor_name to a smarter way to pass this data!!!!
         text = text.strip().replace("Action: ", "")
         actions = [t.strip() for t in text.split(",")]
         
         patterns = {
-            "go_to": {
-                "pattern": r"go_to\s+(\w+)",
-                "fields": ["location"],
+            "goTo": {
+                "pattern": r"goTo\s+(\w+)",
+                "fields": ["target_name"],
             },
             "take": {
                 "pattern": r"take\s+(\d+)\s+of\s+(\w+)",
-                "fields": ["amount", "objectName"],
+                "fields": ["amount", "target_name"],
             },
             "drop": {
                 "pattern": r"drop\s+(\d+)\s+of\s+(\w+)",
-                "fields": ["amount", "objectName"],
+                "fields": ["amount", "target_name"],
             },
             "talk1": {
-                "name": "talk",
+                "function_name": "talk",
                 "pattern": r"talk\s+to\s+(\w+)\s+with\s+\"(\w+)\"",
-                "fields": ["agentName", "content"]
+                "fields": ["target_name", "message"]
             },
             "talk2": {
-                "name": "talk",
+                "function_name": "talk",
                 "pattern": r"talk\s+to\s+(\w+)\s+with\s+\'(\w+)\'",
-                "fields": ["agentName", "content"]
+                "fields": ["target_name", "message"]
             }
         }
 
@@ -104,21 +104,22 @@ class PatternSummarizer:
                 match = re.search(config["pattern"], action)
                 result = None
                 if match:
-                    action_name = config["name"] if "name" in config else action_type
-                    result = {"name": action_name, "arguments": {}}
+                    action_name = config["function_name"] if "function_name" in config else action_type
+                    result = {"function_name": action_name, "parameters": {}, "actor_name": ""}
                     for i, field in enumerate(config["fields"]):
-                        result["arguments"][field] = match.group(i + 1)
+                        result["parameters"][field] = match.group(i + 1)
+                    result["actor_name"] = actor_name
                     break
                 
             if result:
                 output.append(result)
             else:
-                return output
+                return {"actions": output}
 
-        return output
+        return {"actions": output}
 
-    def iterate_step(self, inputs):
+    def iterate_step(self, inputs, input_jsons):
         call_batch = []
-        for input in inputs:
-            call_batch.append(self.parse_action(input))
+        for i, input_item in enumerate(inputs):
+            call_batch.append(self.parse_action(input_item, input_jsons[i]["agent"]["name"]))
         return call_batch

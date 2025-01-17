@@ -75,7 +75,7 @@ class WorkerService:
                 # Wait for acknowledgment
                 data = ""
                 while True:
-                    chunk = registry_socket.recv(1024).decode("utf-8")
+                    chunk = registry_socket.recv(4096).decode("utf-8")
                     if not chunk:
                         break
                     data += chunk
@@ -112,7 +112,7 @@ class WorkerService:
                 # Wait for registration response with assigned ID
                 data = ""
                 while True:
-                    chunk = registry_socket.recv(1024).decode("utf-8")
+                    chunk = registry_socket.recv(4096).decode("utf-8")
                     if not chunk:
                         break
                     data += chunk
@@ -140,7 +140,7 @@ class WorkerService:
             # Read request
             data = ""
             while True:
-                chunk = client_socket.recv(1024).decode("utf-8")
+                chunk = client_socket.recv(4096).decode("utf-8")
                 
                 if not chunk:
                     break

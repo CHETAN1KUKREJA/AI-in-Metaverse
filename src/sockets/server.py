@@ -42,5 +42,6 @@ class SocketServer:
                 thread = Thread(target=client.start_reading)
                 thread.start()
                 self.client_threads.append(thread)
-        except:
+        except Exception as e:
+            print(e.with_traceback(0))
             raise SystemExit("Stopping server")

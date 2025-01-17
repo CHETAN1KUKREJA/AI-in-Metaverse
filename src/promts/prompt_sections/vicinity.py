@@ -11,7 +11,7 @@ def get_vicinity_prompt(vicinity):
             # ownership_str = "are the owner" if obj["owner"] == True else "are not the owner"
             object_desc = (
                 f"there {('is' if obj['amount'] == 1 else 'are')} {amount_str} "
-                f"object {obj['name']} near you of size {obj['size']}, "
+                f"object {obj['name']} near you, "
                 f"you can use it for {obj['usage']}. "
                 # f"you {ownership_str}."
             )

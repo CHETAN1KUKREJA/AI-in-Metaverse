@@ -18,22 +18,24 @@ class LLM:
 
     def update_memory(self, call_batch):
         calls = call_batch[0]
+        calls = calls['actions']
         for call in calls:
-            match call["name"]:
-                case "go_to":
-                    mem = f"You go to {call['arguments']['location']}. Now you are near to it, but still not in it."
+            match call["function_name"]:
+                case "goTo":
+                    mem = f"You go to {call['parameters']['target_name']}. Now you are near to it, but still not in it."
                 case "talk":
-                    mem = f"You try to talk with \"{call['arguments']['other_agent']}\". But \"{call['arguments']['other_agent']}\" doesn't exist here!"
+                    mem = f"You try to talk with \"{call['parameters']['target_name']}\". But \"{call['parameters']['target_name']}\" doesn't exist here!"
                 case "take":
-                    mem = f"You just toke {call['arguments']['amount']} of {call['arguments']['objectName']} from nearby."
+                    mem = f"You just toke {call['parameters']['amount']} of {call['parameters']['target_name']} from nearby."
                 case "drop":
-                    mem = f"You just dropped {call['arguments']['amount']} of {call['arguments']['objectName']} from nearby."
+                    mem = f"You just dropped {call['parameters']['amount']} of {call['parameters']['target_name']} from nearby."
+                
 
             self.memory.append(mem)
 
     def iterate_step(self, input_jsons):
         (action_batch, reason_batch) = self.planer.iterate_step(input_jsons, self.memory)
-        call_batch = self.summarizer.iterate_step(action_batch)
+        call_batch = self.summarizer.iterate_step(action_batch, input_jsons)
         self.update_memory(call_batch)
         return (call_batch, reason_batch)
 
