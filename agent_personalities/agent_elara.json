@@ -3,15 +3,13 @@
         "Name: Elara, Age: 24, Role: Archer",
         "Rule: Archers rely on agility and precision to strike enemies from afar",
         "Environment: The dense forest serves as a natural camouflage for archers",
-        "Rule: Archers must conserve arrows and aim for vital spots",
-        "Openness: Fully committed to innovation, disregards established approaches completely., Conscientiousness: Highly disorganized, often forgets to prepare adequately., Extraversion: Very reserved, avoids social interaction, and prefers solitude., Agreeableness: Balanced, friendly, and cooperative without being overly accommodating., Neuroticism: Extremely insecure, dominated by anxiety and self-doubt."
+        "Rule: Archers must conserve arrows and aim for vital spots"
     ],
     "metadatas": [
         {"type": "character_info"},
         {"type": "rule"},
         {"type": "environment"},
         {"type": "rule"}
-        {"type": "personality"}
     ],
-    "ids": ["char_3", "rule_5", "env_3", "rule_6","pers_3"]
+    "ids": ["char_3", "rule_5", "env_3", "rule_6"]
 }

@@ -1,0 +1,17 @@
+{
+    "documents": [
+        "Timestamp: 2020-05-15T08:00:00Z, Location: University, Experience: Graduated with a degree in Environmental Science, Learning: Gained foundational knowledge in marine biology and conservation",
+        "Timestamp: 2021-07-20T12:00:00Z, Location: Coastal Town, Experience: Participated in a marine conservation project, Learning: Learned techniques for coral reef restoration and fish population monitoring",
+        "Timestamp: 2022-03-10T09:30:00Z, Location: National Park, Experience: Conducted a biodiversity survey in a protected forest area, Learning: Developed skills in species identification and ecological data collection",
+        "Timestamp: 2022-11-05T14:00:00Z, Location: Research Lab, Experience: Published a research paper on the impact of climate change on coastal ecosystems, Learning: Enhanced understanding of climate change effects and mitigation strategies",
+        "Timestamp: 2023-01-25T10:00:00Z, Location: International Conference, Experience: Presented findings on marine pollution at an environmental science conference, Learning: Gained insights from other experts and expanded professional network"
+    ],
+    "metadatas": [
+        {"type": "long_term_experience"},
+        {"type": "long_term_experience"},
+        {"type": "long_term_experience"},
+        {"type": "long_term_experience"},
+        {"type": "long_term_experience"}
+    ],
+    "ids": ["lte_1", "lte_2", "lte_3", "lte_4", "lte_5"]
+}

@@ -3,15 +3,13 @@
         "Name: Ragnar, Age: 32, Role: Warrior",
         "Rule: Warriors fight with honor and strength",
         "Environment: The battlefield is covered with the smell of blood and the roar of war",
-        "Rule: Warriors cannot retreat unless ordered by the commander",
-        "Openness: Very open, actively seeks new experiences and innovations., Conscientiousness: Extremely disciplined, refuses to proceed unless fully prepared., Extraversion: Highly extroverted, often takes the lead in social settings., Agreeableness: Highly agreeable, prioritizes group harmony over personal interests., Neuroticism: Very emotionally stable, remains calm and composed under stress."
+        "Rule: Warriors cannot retreat unless ordered by the commander"
     ],
     "metadatas": [
         {"type": "character_info"},
         {"type": "rule"},
         {"type": "environment"},
         {"type": "rule"}
-        {"type": "personality"}
     ],
-    "ids": ["char_1", "rule_1", "env_1", "rule_2","pers_1"]
+    "ids": ["char_1", "rule_1", "env_1", "rule_2"]
 }
