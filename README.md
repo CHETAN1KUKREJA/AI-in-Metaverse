@@ -305,17 +305,17 @@ We test it for the sample setup 5 times, 4 of the outputs are trying to talk wit
 
 We have test to include the Qwen LLM inside of langchain, currently it cannot stop at the position we want and it's even slower. (Should we still go ahead to fix and test it?)
 
-Procedure to run the langchain pipeline in the Jupyter Notebook - 
+Procedure to run the langchain pipeline in the Jupyter Notebook found in the location src/llm/langchain/final_langchain.ipynb :- 
 
-The first cell installs all the necessary packages and dependencies
-The second cell necessary to login into hugging face to access Mistral 7B
-The third cell is importing libraries necessary to run the pipeline which includes langchain, transformers, torch and tokenizers
-The fourth cell defines all the tools that the agent can use, which would be passed as toll to the langchain toolbox.
-The fifth cell defines and initializes the model i.e. Mistral 7B and the tokenizer required for it.
-The sixth cell defines the LLM class of Mistral which is basically setting up the call function of the model and its generating pipeline.
-The seventh and the eight cell defines some sample promp templates along with initialization in the eighth. Note: This would be replaced by the actual prompt to be given to the agent.
-The ninth cell defines the agent and the executors necessary to carry out the action rollout.
-The remaining cells integrates everything and runs the llm for the next immediate action rollout. Note: This is the main part of the code which is responsible for the actual execution of the actions. The outputs are stored in the json_output_cells.
+1) The first cell installs all the necessary packages and dependencies
+2) The second cell necessary to login into hugging face to access Mistral 7B
+3) The third cell is importing libraries necessary to run the pipeline which includes langchain, transformers, torch and tokenizers
+4) The fourth cell defines all the tools that the agent can use, which would be passed as toll to the langchain toolbox.
+5) The fifth cell defines and initializes the model i.e. Mistral 7B and the tokenizer required for it.
+6) The sixth cell defines the LLM class of Mistral which is basically setting up the call function of the model and its generating pipeline.
+7) The seventh and the eight cell defines some sample promp templates along with initialization in the eighth. Note: This would be replaced by the actual prompt to be given to the agent.
+8) The ninth cell defines the agent and the executors necessary to carry out the action rollout.
+9) The remaining cells integrates everything and runs the llm for the next immediate action rollout. Note: This is the main part of the code which is responsible for the actual execution of the actions. The outputs are stored in the json_output_cells.
 
 ## Socket Communication
 
