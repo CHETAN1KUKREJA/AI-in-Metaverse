@@ -177,4 +177,5 @@ These weights were selected as they empirically yielded credible and reliable re
 - Finalize project structure.
 - Optimize scoring weights. (Hyper parameter fine tuning)
 - Define better Agent Personalities
-
+- Try out a new type of memory system by combining the current system with reinforcement learning to let the system "learn" what memories are important and should last longer, and which can fade away.
+- Look into Temporal Neural Networks for more advanced models of memory decay.
