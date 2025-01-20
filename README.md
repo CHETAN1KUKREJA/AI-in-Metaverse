@@ -6,9 +6,24 @@ LLMs alone predict only next word based on a given prompt/input. This can lead t
 The memory system consists of three types of memory: **Static Memory**, **Short-Term Memory**, and **Long-Term Memory**. All memory types are powered by the [`chromadb`](https://docs.trychroma.com/docs/overview/getting-started) AI database. Each memory subtype is organized into a separate collection within a persistent storage directory, ensuring efficient management and retrieval.
 
 ---
-### Memory Type
+### Memory Structure
 All agent memories are stored as persistent binaries in the `./database/mem_test/<agent_name> folder.` Each memory entry includes three components: `doc` containing the memory string or detail, `metadata` with attributes such as `importance_score` and `timestamp`, and a `unique id` to prevent overwriting. Static memory is immutable and contains essential information about the agent, including its identity, world rules, and environment description. These are stored as JSON files in the `./agent_personalities/<agent_name>.json` path and are loaded during simulation. Static memory is unaffected by decay and is the first memory queried by the agent before short-term or long-term memory. Short-term memory (STM) acts as the initial storage for perceived events, such as environmental data and conversations. Each event has an associated timestamp, which is used to compute an initial score based on recency and importance. STM entries are added or overwrite existing ones with the same id to reduce redundancy. A memory is considered relevant if its total score exceeds the threshold, empirically set at 0.35. If STM contains more than `k` entries, the most important memories are migrated to long-term memory (LTM) if the `migrate_STM2LTM` function is invoked. During migration, entries are deleted from STM and added to LTM only if their importance_score exceeds the threshold. The agent can also reflect, plan, and summarize multiple long-term memories into a new consolidated memory, enabling efficient memory management and improved contextual understanding.
 
+---
+## Abstract Memory Class
+
+The memory system is designed as an abstract class, serving as a blueprint for all core memory-related operations by providing placeholder functions. This modular design enables developers to easily extend functionality and implement new types of memory systems as needed. Additionally, a `MemoryEntry` dataclass is included to streamline the process of handling single document entries, ensuring consistency and simplicity in memory storage and retrieval.
+
+### Key Features:
+- **Abstract Class**: Defines the core structure and necessary methods for any memory system.
+- **ChromaMemory Implementation**:
+  - A child class of the abstract memory class, specifically designed to integrate with `chromadb`.
+  - Implements the abstract methods with the `chromadb` specifications.
+- **Future Flexibility**:
+  - Developers can easily migrate to other databases by implementing a new child class of the abstract memory class.
+  - Ensures modularity and adaptability of the system for different backends.
+
+---
 ## Memory Types
 
 ### 1. **Static Memory**
@@ -40,21 +55,6 @@ All agent memories are stored as persistent binaries in the `./database/mem_test
   - Memories migrate from STM to LTM if their `importance_score > threshold` (only when migration function is invoked).
   - There is no way to insert in to the LTM directly. It always has to pass through STM first.
   - Supports reflection and summarization to condense multiple memories into meaningful insights.
-
----
-
-## Abstract Memory Class
-
-The memory system is designed as an abstract class, serving as a blueprint for all core memory-related operations by providing placeholder functions. This modular design enables developers to easily extend functionality and implement new types of memory systems as needed. Additionally, a `MemoryEntry` dataclass is included to streamline the process of handling single document entries, ensuring consistency and simplicity in memory storage and retrieval.
-
-### Key Features:
-- **Abstract Class**: Defines the core structure and necessary methods for any memory system.
-- **ChromaMemory Implementation**:
-  - A child class of the abstract memory class, specifically designed to integrate with `chromadb`.
-  - Implements the abstract methods with the `chromadb` specifications.
-- **Future Flexibility**:
-  - Developers can easily migrate to other databases by implementing a new child class of the abstract memory class.
-  - Ensures modularity and adaptability of the system for different backends.
 
 ---
 
