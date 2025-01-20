@@ -179,3 +179,4 @@ These weights were selected as they empirically yielded credible and reliable re
 - Define better Agent Personalities
 - Try out a new type of memory system by combining the current system with reinforcement learning to let the system "learn" what memories are important and should last longer, and which can fade away.
 - Look into Temporal Neural Networks for more advanced models of memory decay.
+- Work on defining what should go into what memory. for eg, should procedural step of function calling go into memory?
