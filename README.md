@@ -301,9 +301,11 @@ Finished in 8.2450s
 Finished in 13.0836s
 ```
 
-We test it for the sample setup 5 times, 4 of the outputs are trying to talk with itself, only a single one is reasonable `go_to market`. The average running time is \~8s.
+We test it for the sample setup 5 times, 4 of the outputs are trying to talk with itself, only a single one is reasonable `go_to market`. The average running time is \~8s. However with a high quality prompt with a more descriptive setting of the environment, the results are reasonable even with a smaller model. eg:- 
 
-We have test to include the Qwen LLM inside of langchain, currently it cannot stop at the position we want and it's even slower. (Should we still go ahead to fix and test it?)
+{'actions': [AgentAction(tool='talk', tool_input={'agent_name': 'Maria', 'message': "Hello Maria, I have apples and I'd be willing to trade some for money. Would you consider making a trade?"}, log='```json\n{"thought": "I currently have 50 euros and 20 apples. I am in the forest and Maria, who has no apples, is nearby. I can try to collect more apples, go to the trade centre to trade with other agents, or continue talking to Maria to check if her offer changes. I should maximize my money and apples. I will try to trade apples for money with Maria again.",\n "action": "talk",\n "action_input": {\n   "agent_name": "Maria",\n   "message": "Hello Maria, I have apples and I\'d be willing to trade some for money. Would you consider making a trade?"\n }\n}```')], 'messages': [AIMessage(content='```json\n{"thought": "I currently have 50 euros and 20 apples. I am in the forest and Maria, who has no apples, is nearby. I can try to collect more apples, go to the trade centre to trade with other agents, or continue talking to Maria to check if her offer changes. I should maximize my money and apples. I will try to trade apples for money with Maria again.",\n "action": "talk",\n "action_input": {\n   "agent_name": "Maria",\n   "message": "Hello Maria, I have apples and I\'d be willing to trade some for money. Would you consider making a trade?"\n }\n}```', additional_kwargs={}, response_metadata={})]}
+
+We have test to include the Qwen LLM inside of langchain. The results were good but needs further work in optimizing the runtime to fully utilise the GPU and minimize the time per call and to match the <2 seconds average time of mistral API.
 
 Procedure to run the langchain pipeline in the Jupyter Notebook found in the location src/llm/langchain/final_langchain.ipynb :- 
 
@@ -316,6 +318,12 @@ Procedure to run the langchain pipeline in the Jupyter Notebook found in the loc
 7) The seventh and the eight cell defines some sample promp templates along with initialization in the eighth. Note: This would be replaced by the actual prompt to be given to the agent.
 8) The ninth cell defines the agent and the executors necessary to carry out the action rollout.
 9) The remaining cells integrates everything and runs the llm for the next immediate action rollout. Note: This is the main part of the code which is responsible for the actual execution of the actions. The outputs are stored in the json_output_cells.
+
+some observations and advice regarding langchain :-
+
+1) try to optimise langchain with respect to the GPU further to reduce the time.
+2) always use the stream functionality of agent_executor and dont call invoke directly as it runs into an infinity loop and cannot stop
+3) try and combine the vllm and langchain approach to reap the benefits of faster llm calls and tool calling functionality.
 
 ## Socket Communication
 
