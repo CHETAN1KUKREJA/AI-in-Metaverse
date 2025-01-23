@@ -157,10 +157,14 @@ These weights were selected as they empirically yielded credible and reliable re
 ---
 
 ## How to Use
-1. Populate static memory using JSON files in the `agent_personalities/` directory.
-2. Add new events to STM using the `MemoryEntry` dataclass or JSON format.
-3. Call `migrate_stm2ltm`, `summarize_and_forget`, or `reflect_from_recent_memory` as needed to manage memory transitions.
-4. Query memory using the `query_memory` function with an input prompt.
+1. Start the LLM server by running the following command in a separate terminal 
+```bash
+python server/server.py
+```
+2. Populate static memory using JSON files in the `agent_personalities/` directory.
+3. Add new events to STM using the `MemoryEntry` dataclass or JSON format.
+4. Call `migrate_stm2ltm`, `summarize_and_forget`, or `reflect_from_recent_memory` as needed to manage memory transitions.
+5. Query memory using the `query_memory` function with an input prompt.
 
 ---
 
