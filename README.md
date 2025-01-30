@@ -118,13 +118,13 @@ The memory system is designed as an abstract class, serving as a blueprint for a
 The memory score is calculated as:  
 $$ \text{score} = \alpha_{\text{recency}} \cdot \text{recency} + \alpha_{\text{importance}} \cdot \text{importance} + \alpha_{\text{relevancy}} \cdot \text{relevancy} $$
 
-> If the score is not present in the metadata, the function then reduces to only relevancy, i.e., the agent queries only the memories that has the most similar embedding/meaning to the given promt.
+> If the score is not present in the metadata, the function then reduces to only relevancy, i.e., the agent queries only the memories that has the most similar embedding/meaning to the given promt. The weighting factor $\alpha_{\text{relevancy}}$ is then $1$.
 
 
 #### **Weights**:
 - $\alpha_{\text{recency}} = 0.25$
 - $\alpha_{\text{importance}} = 0.25$
-- $\alpha_{\text{relevancy}} = 1.00$
+- $\alpha_{\text{relevancy}} = 0.5$
 
 These weights were selected as they empirically yielded credible and reliable results. *(Note: These values are subject to adjustment if a better combination is identified in the future.)*
 
@@ -135,7 +135,7 @@ These weights were selected as they empirically yielded credible and reliable re
    - Computed using an exponential decay function: `k^(time_diff_in_hours)`, where \( k \) is the decay factor.
 
 2. **Importance**:
-   - Calculated using a LLM when inserting any document into the memory
+   - Calculated using a LLM when inserting any document into the memory. See Feature [6 Importance Scoring](#6-importance-scoring).
 
 3. **Relevancy**:
    - Based on embedding similarity.
